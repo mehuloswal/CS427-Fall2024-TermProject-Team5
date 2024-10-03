@@ -9,7 +9,7 @@ The code for CS427 Android app.
 | Name | NetID | GitHub ID | Role | Experience |
 | ------------- | ------------- | ------------| ------------- | ----------------------------------|
 | Mehul Oswal | mehuljo2 | mehuloswal | Manager | C++, JS, TS, Python, Web Dev. |
-| | | | | |
+| Ruipeng Han| ruipeng2 | RuipengHan | Developer | Python/Go; Django/Flask Full-Stack; Databases |
 | | | | | |
 | | | | | |
 | | | | | |
