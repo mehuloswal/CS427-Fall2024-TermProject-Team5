@@ -10,7 +10,7 @@ The code for CS427 Android app.
 | ------------- | ------------- | ------------| ------------- | ----------------------------------|
 | Mehul Oswal | mehuljo2 | mehuloswal | Manager | C++, JS, TS, Python, Web Dev. |
 | Ruipeng Han| ruipeng2 | RuipengHan | Developer | Python/Go; Django/Flask Full-Stack; Databases |
-| | | | | |
+| Aristofanes Cruz | ac163 | ac163 | Developer | JS, TS, React, Full-Stack, Redux, Sass |
 | | | | | |
 | | | | | |
 | | | | | |
