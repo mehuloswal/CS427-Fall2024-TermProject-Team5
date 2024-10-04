@@ -28,9 +28,9 @@ Meeting location (zoom link):
 </br>
 <b>Week 1</b>
 </br>
-Members present: List the NetID of the people who attended the meeting
+Members present: mehuljo2, ruipeng2, zexinl2, pranav31,
 </br>
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: Discussed about the team logistics and milestone 1. Assigning roles to all members of the group.
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
