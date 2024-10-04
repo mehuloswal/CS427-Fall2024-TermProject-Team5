@@ -12,7 +12,7 @@ The code for CS427 Android app.
 | Ruipeng Han| ruipeng2 | RuipengHan | Developer | Python/Go; Django/Flask Full-Stack; Databases |
 | Aristofanes Cruz | ac163 | ac163 | Developer | JS, TS, React, Full-Stack, Redux, Sass |
 | Zexin Lin | zexinl2 | ZexinLin2001 | Developer | Java, TS, JavaWeb, MySQL, Backend|
-| | | | | |
+| Wenqi Liao | wenqi6 | WenqiLiao | Developer | Java, JS, Python|
 | | | | | |
 | | | | | |
 | | | | | |
