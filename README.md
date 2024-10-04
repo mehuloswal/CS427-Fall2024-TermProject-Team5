@@ -13,7 +13,7 @@ The code for CS427 Android app.
 | Aristofanes Cruz | ac163 | ac163 | Developer | JS, TS, React, Full-Stack, Redux, Sass |
 | Zexin Lin | zexinl2 | ZexinLin2001 | Developer | Java, TS, JavaWeb, MySQL, Backend|
 | Wenqi Liao | wenqi6 | WenqiLiao | Developer | Java, JS, Python|
-| | | | | |
+| Sujithra Rajan | rajan11 | Sujishark | Developer | C++, Python, Java, React, Full-Stack |
 | | | | | |
 | | | | | |
 <br/>
