@@ -14,6 +14,7 @@ The code for CS427 Android app.
 | Zexin Lin | zexinl2 | ZexinLin2001 | Developer | Java, TS, JavaWeb, MySQL, Backend|
 | Wenqi Liao | wenqi6 | WenqiLiao | Developer | Java, JS, Python|
 | Sujithra Rajan | rajan11 | Sujishark | Developer | C++, Python, Java, React, Full-Stack |
+| Pranav Uppiliappan | pranav31 | anacondamaster97 | Developer | C++, Python, React, Full-Stack, Flask, Java |
 | | | | | |
 | | | | | |
 <br/>
