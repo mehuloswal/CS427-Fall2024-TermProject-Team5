@@ -36,7 +36,7 @@ Meeting notes: Discussed about the team logistics and milestone 1. Assigning rol
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
 | mehuljo2 | Initial Meet to discuss logistics | Setting up the repo, meets and project |
-| | | |
+| pranav31 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project |
 | | | |
 | | | |
 | | | |
