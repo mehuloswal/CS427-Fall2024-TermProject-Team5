@@ -29,7 +29,7 @@ Meeting location (zoom link):
 </br>
 <b>Week 1</b>
 </br>
-Members present: mehuljo2, ruipeng2, zexinl2, pranav31,
+Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6
 </br>
 Meeting notes: Discussed about the team logistics and milestone 1. Assigning roles to all members of the group.
 </br>
@@ -37,7 +37,7 @@ Meeting notes: Discussed about the team logistics and milestone 1. Assigning rol
 | ---------------| --------------------------------| ----------------------|
 | mehuljo2 | Initial Meet to discuss logistics | Setting up the repo, meets and project |
 | pranav31 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project |
-| | | |
+| wenqu6 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project |
 | | | |
 | | | |
 | | | |
