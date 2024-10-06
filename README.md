@@ -29,19 +29,19 @@ Meeting location (zoom link): https://illinois.zoom.us/j/86337906532?pwd=B6M3KVT
 </br>
 <b>Week 1</b>
 </br>
-Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6
+Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6, rajan11, ac163
 </br>
-Meeting notes: Discussed about the team logistics and milestone 1. Assigning roles to all members of the group.
+Meeting notes: Discussed about the team logistics and milestone. Assigning roles to all members of the group. Figuring out the meeting times. Completing the milestone 1 and discussing everybody's strengths.
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
-| mehuljo2 | Initial Meet to discuss logistics | Setting up the repo, meets and project |
+| mehuljo2 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project |
 | pranav31 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project |
 | wenqi6 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project |
 | rajan11 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project |
 | zexinl2 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project|
-| | | |
-| | | |
+| rajan11 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project|
+| ac163 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project|
 | | | |
 </br>
 
