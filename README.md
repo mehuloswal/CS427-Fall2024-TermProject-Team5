@@ -41,6 +41,7 @@ Meeting notes: Discussed about the team logistics and milestone. Assigning roles
 | rajan11 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project |
 | zexinl2 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project|
 | ac163 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project|
+| ruipeng2 | Initial Meet to discuss logistics and figure out team roles | Setting up the repo, meets and project|
 | | | |
 </br>
 
