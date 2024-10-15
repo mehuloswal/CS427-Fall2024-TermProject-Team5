@@ -24,7 +24,7 @@ The code for CS427 Android app.
 </br>
 Meeting time: Tuesday, 5PM
 </br>
-Meeting location (zoom link): https://illinois.zoom.us/j/86337906532?pwd=B6M3KVT97v0FQ92jb9pUHGkKy5jeGQ.1
+Meeting location (zoom link): https://illinois.zoom.us/j/89556948440?pwd=bullknKQFUmAqJZaK5eZuYFOUGqdTV.1
 </br>
 </br>
 <b>Week 1</b>
