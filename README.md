@@ -55,7 +55,7 @@ Meeting notes: Discussed how to start working on milestone 2. Assigning tasks in
 | ---------------| --------------------------------| ----------------------|
 | mehuljo2 | Spliting tasks to all the members. Making sure everyone is in sync with each other. Fixing minor errors | To Work on the Informal Requirements and review all the other tasks done by the members. |
 | | | |
-| | | |
+| wenqi6 | Working on class diagram w/ Zexin | Finish class diagram|
 | rajan11 | Working on component transition graph | Finish component transition graph, make sure it aligns with the class diagram and get it reviewed|
 | zexinl2 | Task split, working on class diagram w/ Wenqi | Finish class diagram and submit to manager for review|
 | | | |
@@ -73,7 +73,7 @@ Meeting notes: Iteratively working on building the class diagram initially. Afte
 | ---------------| --------------------------------| ----------------------|
 | mehuljo2 | Completed the informal requirements. Discussed with the members to fix the current state of the diagram to make it relevant. | Assign tasks for milestone 3. Working synchronously within subteams to write the code. |
 | | | |
-| | | |
+| wenqi6 | Disussion meeting, finished class diagram with Zexin | Start working toward milestone3 |
 | rajan11 | Completed component transition graph | Started working on milestone 3 |
 | zexinl2 | Disussion meeting, finished class diagram with Wenqi | Start working toward milestone3 |
 | | | |
