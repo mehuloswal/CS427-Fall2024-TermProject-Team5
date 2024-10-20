@@ -59,7 +59,7 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 | | | |
 | | | |
 | | | |
-| | | |
+|zexinl2 | Task split, working on class diagram w/ Wenqi | Finish class diagram and submit to manager for review|
 |ruipeng2 | Task allocation, working on component transition graph | Finish component transition graph and make sure it aligns with the class diagram|
 </br>
 
@@ -77,7 +77,7 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 | | | |
 | | | |
 | | | |
-| | | |
+| zexinl2| Disussion meeting, finished class diagram with Wenqi| Start working toward milestone3 |
 | ruipeng2 |Finished component transition graph| Working on milstone 3 |
 </br>
 
