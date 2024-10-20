@@ -56,11 +56,11 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 | | | |
 | | | |
 | | | |
+| rajan11 | Working on component transition graph | Finish component transition graph, make sure it aligns with the class diagram and get it reviewed|
+| zexinl2 | Task split, working on class diagram w/ Wenqi | Finish class diagram and submit to manager for review|
 | | | |
+| ruipeng2 | Task allocation, working on component transition graph | Finish component transition graph and make sure it aligns with the class diagram|
 | | | |
-| | | |
-|zexinl2 | Task split, working on class diagram w/ Wenqi | Finish class diagram and submit to manager for review|
-|ruipeng2 | Task allocation, working on component transition graph | Finish component transition graph and make sure it aligns with the class diagram|
 </br>
 
 <b>Week 3</b>
@@ -74,11 +74,11 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 | | | |
 | | | |
 | | | |
+| rajan11 | Completed component transition graph | Started working on milestone 3 |
+| zexinl2 | Disussion meeting, finished class diagram with Wenqi | Start working toward milestone3 |
 | | | |
-| | | |
-| | | |
-| zexinl2| Disussion meeting, finished class diagram with Wenqi| Start working toward milestone3 |
 | ruipeng2 |Finished component transition graph| Working on milstone 3 |
+| | | |
 </br>
 
 <b>Week 4</b>
