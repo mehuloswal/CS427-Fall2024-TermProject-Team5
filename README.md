@@ -60,7 +60,7 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 | | | |
 | | | |
 | | | |
-| | | |
+|ruipeng2 | Task allocation, working on component transition graph | Finish component transition graph and make sure it aligns with the class diagram|
 </br>
 
 <b>Week 3</b>
@@ -78,7 +78,7 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 | | | |
 | | | |
 | | | |
-| | | |
+| ruipeng2 |Finished component transition graph| Working on milstone 3 |
 </br>
 
 <b>Week 4</b>
