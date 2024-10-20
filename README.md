@@ -47,13 +47,13 @@ Meeting notes: Discussed about the team logistics and milestone. Assigning roles
 
 <b>Week 2</b>
 </br>
-Members present: List the NetID of the people who attended the meeting
+Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6, rajan11, ac163
 </br>
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: Discussed how to start working on milestone 2. Assigning tasks in sub teams. Discussing how do we build the application and the basic outline of the class diagrams and activity flow.
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
-| | | |
+| mehuljo2 | Spliting tasks to all the members. Making sure everyone is in sync with each other. Fixing minor errors | To Work on the Informal Requirements and review all the other tasks done by the members. |
 | | | |
 | | | |
 | rajan11 | Working on component transition graph | Finish component transition graph, make sure it aligns with the class diagram and get it reviewed|
@@ -65,13 +65,13 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 
 <b>Week 3</b>
 </br>
-Members present: List the NetID of the people who attended the meeting
+Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6, rajan11, ac163
 </br>
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: Iteratively working on building the class diagram initially. After having the fixed number of components, discussing the component transition graph to make it in sync with each other. Wrapping up the milestone 2 and fixing all the leftovers.
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
-| | | |
+| mehuljo2 | Completed the informal requirements. Discussed with the members to fix the current state of the diagram to make it relevant. | Assign tasks for milestone 3. Working synchronously within subteams to write the code. |
 | | | |
 | | | |
 | rajan11 | Completed component transition graph | Started working on milestone 3 |
