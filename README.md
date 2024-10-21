@@ -54,7 +54,7 @@ Meeting notes: Discussed how to start working on milestone 2. Assigning tasks in
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
 | mehuljo2 | Spliting tasks to all the members. Making sure everyone is in sync with each other. Fixing minor errors | To Work on the Informal Requirements and review all the other tasks done by the members. |
-| pranav31 | Working w/Aris on the Use Cases | Finish the use cases. |
+| pranav31 | Working w/Aris on the Use Cases | Finish the use cases |
 | wenqi6 | Working on class diagram w/ Zexin | Finish class diagram|
 | rajan11 | Working on component transition graph | Finish component transition graph, make sure it aligns with the class diagram and get it reviewed|
 | zexinl2 | Task split, working on class diagram w/ Wenqi | Finish class diagram and submit to manager for review|
