@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             finish();
         } else {
             // Displays user email
-            userDetails.setText(user.getEmail());
+            userDetails.setText("Hello, " + user.getEmail());
         }
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
