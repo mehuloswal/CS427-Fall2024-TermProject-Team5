@@ -7,4 +7,30 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Primary Colors -->
+    <color name="colorPrimaryLight">#6200EE</color> <!-- A deep purple for light mode -->
+    <color name="colorPrimaryDark">#BB86FC</color> <!-- Softer purple for dark mode -->
+    <color name="colorPrimaryVariantLight">#3700B3</color>
+    <color name="colorPrimaryVariantDark">#3700B3</color>
+
+    <!-- Secondary Colors -->
+    <color name="colorSecondaryLight">#03DAC6</color> <!-- Teal for accent -->
+    <color name="colorSecondaryDark">#03DAC5</color>
+
+    <!-- Background Colors -->
+    <color name="backgroundLight">#FFFFFF</color> <!-- White background for light mode -->
+    <color name="backgroundDark">#121212</color> <!-- Dark gray for dark mode -->
+
+    <!-- Text Colors -->
+    <color name="textColorLight">#000000</color> <!-- Black text for light mode -->
+    <color name="textColorDark">#FFFFFF</color> <!-- White text for dark mode -->
+
+
+    <!-- Light Mode Colors -->
+    <color name="buttonBackgroundLight">#6200EE</color> <!-- Deep purple for light mode buttons -->
+    <color name="buttonTextLight">#FFFFFF</color> <!-- White text for light mode buttons -->
+
+    <!-- Dark Mode Colors -->
+    <color name="buttonBackgroundDark">#BB86FC</color> <!-- Softer purple for dark mode buttons -->
+    <color name="buttonTextDark">#000000</color> <!-- Black text for dark mode buttons -->
 </resources>
