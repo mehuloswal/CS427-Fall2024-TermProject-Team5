@@ -1,17 +1,20 @@
 package edu.uiuc.cs427app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -30,6 +33,7 @@ public class Register extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView loginNow;
+    Switch themeSwitch;
 
     @Override
     public void onStart() {
@@ -55,6 +59,20 @@ public class Register extends AppCompatActivity {
         editPassword = findViewById(R.id.password);
         progressBar = findViewById(R.id.progressBar);
         loginNow = findViewById(R.id.loginNow);
+        themeSwitch = findViewById(R.id.themeSwitch);
+
+        // set up the theme switch feature
+        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
+        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
+        AppCompatDelegate.setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        themeSwitch.setChecked(isNightMode);
+
+        themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("night_mode", isChecked);
+            editor.apply();
+            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        });
 
         loginNow.setOnClickListener(new View.OnClickListener() {
             @Override

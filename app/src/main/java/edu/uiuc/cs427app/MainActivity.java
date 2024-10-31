@@ -1,6 +1,7 @@
 package edu.uiuc.cs427app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import edu.uiuc.cs427app.databinding.ActivityMainBinding;
@@ -15,6 +17,7 @@ import edu.uiuc.cs427app.databinding.ActivityMainBinding;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.firebase.Firebase;
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Button logoutBtn;
 
+    Switch themeSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         auth= FirebaseAuth.getInstance();
         logoutBtn = findViewById(R.id.logout_btn);
         userDetails = findViewById(R.id.user_details);
+        themeSwitch = findViewById(R.id.themeSwitch);
 
         user = auth.getCurrentUser();
         if (user == null) {
@@ -74,6 +79,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 finish();
             }
+        });
+
+        // Set up the theme switch feature
+        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
+        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
+        AppCompatDelegate.setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        themeSwitch.setChecked(isNightMode);
+
+        themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("night_mode", isChecked);
+            editor.apply();
+            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         });
 
         // Initializing the UI components

@@ -59,4 +59,9 @@
         android:text="@string/click_to_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <Switch
+        android:id="@+id/themeSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dark Mode" />
 </LinearLayout>
