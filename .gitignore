@@ -1,3 +1,6 @@
+venv/
+
+
 # Gradle files
 .gradle/
 build/
@@ -27,7 +30,7 @@ render.experimental.xml
 *.keystore
 
 # Google Services (e.g. APIs or Firebase)
-app/google-services.json
+google-services.json
 
 # Android Profiling
 *.hprof
