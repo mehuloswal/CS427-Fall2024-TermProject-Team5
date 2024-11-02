@@ -6,6 +6,20 @@ user_city_bp = Blueprint('user_city', __name__)
 
 @user_city_bp.route('/getCity', methods=['GET'])
 def get_city():
+    """
+    Retrieve all cities associated with a user.
+
+    Args:
+        userEmail (str): The email address of the user (passed as URL parameter)
+
+    Returns:
+        tuple: A tuple containing:
+            - JSON response with list of city names if successful
+            - HTTP status code 200 if successful, 404 if user not found
+
+    Raises:
+        404: If the user is not found
+    """
     user_email = request.args.get('userEmail')
     user = User.query.filter_by(email=user_email).first()
 
@@ -20,6 +34,26 @@ def get_city():
 
 @user_city_bp.route('/addCity', methods=['POST'])
 def add_city():
+    """
+    Add a new city to a user's list of cities.
+
+    Args:
+        JSON payload containing:
+            - cityName (str): Name of the city to add
+            - userEmail (str): Email address of the user
+
+    Returns:
+        tuple: A tuple containing:
+            - JSON response with success/error message
+            - HTTP status code:
+                * 200: Success (city added or already exists)
+                * 404: User not found
+
+    Notes:
+        - Creates a new city entry if it doesn't exist
+        - Creates a new user-city relationship if it doesn't exist
+        - Uses default coordinates (0.0, 0.0) for new cities
+    """
     data = request.get_json()
     city_name = data.get('cityName')
     user_email = data.get('userEmail')
