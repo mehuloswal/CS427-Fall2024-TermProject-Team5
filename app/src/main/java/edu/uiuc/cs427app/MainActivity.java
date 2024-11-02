@@ -24,6 +24,8 @@ import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import edu.uiuc.cs427app.Config;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -68,7 +70,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             finish();
         } else {
             // Displays user email
-            userDetails.setText("Hello, " + user.getEmail());
+            loadCitiesFromServer(user.getEmail());
+            String teamNumber = getString(R.string.app_name);
+            getSupportActionBar().setTitle(teamNumber + " - " + user.getEmail());
         }
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +88,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Set up the theme switch feature
         SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
         boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
-        AppCompatDelegate.setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate
+                .setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         themeSwitch.setChecked(isNightMode);
 
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -103,8 +108,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cityListContainer = findViewById(R.id.cityListContainer);
 
         // Example JSON response
-        String jsonResponse = "[\"Champaign\", \"Chicago\", \"New York\"]";
-        updateCityList(jsonResponse);
+        // String jsonResponse = "[\"Champaign\", \"Chicago\", \"New York\"]";
+        // updateCityList(jsonResponse);
 
         Button buttonNew = findViewById(R.id.buttonAddLocation);
         buttonNew.setOnClickListener(this);
@@ -136,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void loadCitiesFromServer(String userEmail) {
         new Thread(() -> {
             try {
-                URL url = new URL("http://localhost:5000/getCity?userEmail=" + userEmail);
+                URL url = new URL(Config.API_URL + "getCity?userEmail=" + userEmail);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
 
