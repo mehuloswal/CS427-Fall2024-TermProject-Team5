@@ -28,3 +28,13 @@ def get_user(id):
         "theme": user.theme,
         "extended_theme": user.extended_theme
     })
+# /users/userEmail='test1gmail.com'
+@users_bp.route('/user/theme/', methods=['GET'])
+def get_user_by_email():
+    email = request.args.get('userEmail')
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify({
+        "theme": user.theme,
+    })
