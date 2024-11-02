@@ -1,0 +1,6 @@
+package edu.uiuc.cs427app;
+
+public class Config {
+    // Set up the API URL from flask server (The one which has the IP address)
+    public static final String API_URL = "http://10.0.2.2:5001/api/";
+}
