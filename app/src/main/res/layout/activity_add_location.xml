@@ -9,15 +9,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter City Name"
+        android:text="Enter or Select City Name"
         android:textSize="18sp"
         android:paddingBottom="10dp"/>
 
-    <EditText
-        android:id="@+id/cityEditText"
+    <AutoCompleteTextView
+        android:id="@+id/cityAutoCompleteTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="City Name"/>
+        android:hint="City Name"
+        android:inputType="text"/>
 
     <Button
         android:id="@+id/addCityButton"

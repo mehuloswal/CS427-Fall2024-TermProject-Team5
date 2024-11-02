@@ -1,4 +1,5 @@
 # api/cities.py
+
 from flask import Blueprint, request, jsonify
 from models import db, City
 
@@ -26,3 +27,10 @@ def get_city(id):
         "latitude": city.latitude,
         "longitude": city.longitude
     })
+
+# New route to get all cities
+@cities_bp.route('/cities', methods=['GET'])
+def get_all_cities():
+    cities = City.query.all()
+    city_names = [city.city_name for city in cities]
+    return jsonify(city_names)
