@@ -1,5 +1,13 @@
 package edu.uiuc.cs427app;
 
+import edu.uiuc.cs427app.Config;
+
+import org.json.JSONObject;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -40,7 +48,7 @@ public class Register extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and redirect to main activity
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if (currentUser != null) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
@@ -64,14 +72,16 @@ public class Register extends AppCompatActivity {
         // set up the theme switch feature
         SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
         boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
-        AppCompatDelegate.setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate
+                .setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         themeSwitch.setChecked(isNightMode);
 
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("night_mode", isChecked);
             editor.apply();
-            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+            AppCompatDelegate.setDefaultNightMode(
+                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         });
 
         loginNow.setOnClickListener(new View.OnClickListener() {
@@ -107,17 +117,56 @@ public class Register extends AppCompatActivity {
                 createUserTask.addOnCompleteListener(task -> {
                     progressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Toast.makeText(Register.this, "Account created.",
-                                Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), Login.class);
-                        startActivity(intent);
-                        finish();
+                        boolean isDarkMode = themeSwitch.isChecked();
+                        sendUserToBackend(email, isDarkMode);
                     }
                 });
 
             }
         });
 
+    }
+
+    private void sendUserToBackend(String email, boolean isDarkMode) {
+        new Thread(() -> {
+            try {
+                // Prepare JSON data
+                String username = email.split("@")[0];
+                JSONObject jsonData = new JSONObject();
+                jsonData.put("username", username);
+                jsonData.put("email", email);
+                jsonData.put("theme", isDarkMode);
+
+                // Set up the connection
+                URL url = new URL(Config.API_URL + "users");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                conn.setDoOutput(true);
+
+                // Send JSON data
+                OutputStream os = conn.getOutputStream();
+                os.write(jsonData.toString().getBytes("UTF-8"));
+                os.close();
+
+                // Check the response
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_CREATED) {
+                    runOnUiThread(() -> Toast.makeText(Register.this, "User created successfully", Toast.LENGTH_SHORT)
+                            .show());
+                    Intent intent = new Intent(getApplicationContext(), Login.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    runOnUiThread(
+                            () -> Toast.makeText(Register.this, "Failed to create user", Toast.LENGTH_SHORT).show());
+                }
+                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(
+                        () -> Toast.makeText(Register.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
 }
