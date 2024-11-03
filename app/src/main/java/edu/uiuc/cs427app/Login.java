@@ -34,6 +34,10 @@ public class Login extends AppCompatActivity {
     TextView registerNow;
     Switch themeSwitch;
 
+    /**
+     * Checks if the user is already signed in when the activity starts.
+     * If the user is signed in, redirects them to the main activity.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -46,16 +50,16 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initializes the login activity, sets up UI elements, theme switching, and button actions.
+     * Configures Firebase Authentication instance and handles user interactions for login.
+     *
+     * @param savedInstanceState Bundle containing the activity's previously saved state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
 
         mAuth = FirebaseAuth.getInstance();
         buttonLogin = findViewById(R.id.btn_login);
@@ -79,6 +83,12 @@ public class Login extends AppCompatActivity {
         });
 
         registerNow.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Handles the click event for "Register Now" text view.
+             * Redirects the user to the registration activity.
+             *
+             * @param view The view that was clicked.
+             */
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Register.class);
@@ -88,6 +98,12 @@ public class Login extends AppCompatActivity {
         });
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Handles the click event for the "Login" button.
+             * Validates email and password inputs, then attempts to log in the user via Firebase Authentication.
+             *
+             * @param view The view that was clicked.
+             */
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -105,6 +121,12 @@ public class Login extends AppCompatActivity {
 
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            /**
+                             * Callback triggered when Firebase Authentication completes login attempt.
+                             * If successful, redirects to the main activity; otherwise, shows an error message.
+                             *
+                             * @param task The result of the Firebase authentication attempt.
+                             */
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);

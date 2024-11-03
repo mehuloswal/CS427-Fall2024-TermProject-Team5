@@ -27,6 +27,12 @@ public class DetailsActivity extends AppCompatActivity {
     private String cityName;
     private FirebaseUser user;
 
+    /**
+     * Initializes the DetailsActivity, setting up UI elements to display city information,
+     * and fetches the city name from the intent and current Firebase user information.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

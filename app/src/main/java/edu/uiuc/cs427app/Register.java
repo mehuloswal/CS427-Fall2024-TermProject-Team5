@@ -43,6 +43,10 @@ public class Register extends AppCompatActivity {
     TextView loginNow;
     Switch themeSwitch;
 
+    /**
+     * Called when the activity is starting.
+     * Checks if the user is already signed in and redirects to the main activity if so.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -55,6 +59,12 @@ public class Register extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initializes the activity, sets up the UI components, and configures the theme switch and
+     * registration functionality.
+     *
+     * @param savedInstanceState Bundle object containing the activity's previously saved state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +95,11 @@ public class Register extends AppCompatActivity {
         });
 
         loginNow.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Redirects the user to the login activity if they already have an account.
+             *
+             * @param view The view that was clicked.
+             */
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Login.class);
@@ -94,6 +109,13 @@ public class Register extends AppCompatActivity {
         });
 
         buttonReg.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Handles the click event for the "Register" button.
+             * Validates the email and password inputs, then attempts to register the user
+             * with Firebase Authentication.
+             *
+             * @param view The view that was clicked.
+             */
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -127,6 +149,14 @@ public class Register extends AppCompatActivity {
 
     }
 
+    /**
+     * Sends user information to the backend server upon successful registration.
+     * Constructs a JSON object with user data and sends it as a POST request.
+     * Displays success or failure message based on the server response.
+     *
+     * @param email      The email address of the registered user.
+     * @param isDarkMode The user's theme preference (dark mode enabled or disabled).
+     */
     private void sendUserToBackend(String email, boolean isDarkMode) {
         new Thread(() -> {
             try {

@@ -47,12 +47,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     FirebaseAuth auth;
     FirebaseUser user;
-    TextView userDetails;
-
     Button logoutBtn;
 
     Switch themeSwitch;
 
+    /**
+     * States initialization in the MainActivity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         auth= FirebaseAuth.getInstance();
         logoutBtn = findViewById(R.id.logout_btn);
-        userDetails = findViewById(R.id.user_details);
         themeSwitch = findViewById(R.id.themeSwitch);
 
         user = auth.getCurrentUser();
@@ -76,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Logs user out and redirects user to Login page
+             * @param view The view that was clicked.
+             */
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
@@ -93,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         themeSwitch.setChecked(isNightMode);
 
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Switches theme
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("night_mode", isChecked);
             editor.apply();
@@ -100,21 +109,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         // Initializing the UI components
-        // The list of locations should be customized per user (change the implementation so that
-        // buttons are added to layout programmatically
-
         cityButtonMap = new HashMap<>();
         // Find the container for the city list
         cityListContainer = findViewById(R.id.cityListContainer);
-
-        // Example JSON response
-        // String jsonResponse = "[\"Champaign\", \"Chicago\", \"New York\"]";
-        // updateCityList(jsonResponse);
 
         Button buttonNew = findViewById(R.id.buttonAddLocation);
         buttonNew.setOnClickListener(this);
     }
 
+    /**
+     * The logistic control for the Details button for each added city on the layout
+     * @param view The view that was clicked.
+     */
     @Override
     public void onClick(View view) {
         Intent intent;
@@ -137,7 +143,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    // TODO: Call this function to fetch list of cities from users & render them in onCreate()
+    /**
+     * Fetch the list of cities from the backend server via RESTful APIs
+     * @param userEmail The logged in user's email
+     */
     private void loadCitiesFromServer(String userEmail) {
         new Thread(() -> {
             try {
@@ -171,10 +180,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }).start();
     }
 
+    /**
+     * Dynamically and programmatically updates the list of cities in the MainActivity layout
+     * This function parses jsonCityList (as an array of city names)
+     * @param jsonCityList The list of cities in Json string format
+     */
     private void updateCityList(String jsonCityList) {
-        // Parse jsonCityList (as an array of city names)
-        // Update your UI elements to display the list of cities
-        // For example, you could dynamically add TextViews to a LinearLayout
         try {
             cityListContainer.removeAllViews();
             cityButtonMap.clear(); // Clear previous mappings
