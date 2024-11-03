@@ -28,6 +28,7 @@ import edu.uiuc.cs427app.Config;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             finish();
         } else {
+            // fetch user preference
+            fetchUserThemePreference();
             // Displays user email
             loadCitiesFromServer(user.getEmail());
             String teamNumber = getString(R.string.app_name);
@@ -227,6 +230,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+    private void fetchUserThemePreference() {
+        new Thread(() -> {
+            try {
+                URL url = new URL(Config.API_URL + "user/theme?userEmail=" + user.getEmail());
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        response.append(line);
+                    }
+                    in.close();
+
+                    // Parse the response to get the theme preference
+                    JSONObject jsonResponse = new JSONObject(response.toString());
+                    boolean isNightMode = jsonResponse.getBoolean("theme");
+
+                    runOnUiThread(() -> {
+                        // Apply theme preference
+                        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("night_mode", isNightMode);
+                        editor.apply();
+                        AppCompatDelegate.setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+                        themeSwitch.setChecked(isNightMode);
+                    });
+                } else {
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to load theme preference.", Toast.LENGTH_SHORT).show());
+                }
+                conn.disconnect();
+            } catch (Exception e) {
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }
+
 
 }
 
