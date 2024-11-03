@@ -38,3 +38,15 @@ def get_user_by_email():
     return jsonify({
         "theme": user.theme,
     })
+
+
+@users_bp.route('/updateUserTheme', methods=['POST'])
+def update_user_theme():
+    email = request.args.get('userEmail')
+    theme = request.args.get('theme') == 'true'  # Convert string to boolean
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    user.theme = theme
+    db.session.commit()
+    return jsonify({"message": "Theme updated successfully"}), 200

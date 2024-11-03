@@ -26,6 +26,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class Login extends AppCompatActivity {
     TextInputEditText editUsername, editPassword;
     Button buttonLogin;
@@ -43,7 +50,7 @@ public class Login extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and redirect to main activity
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if (currentUser != null) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
@@ -51,10 +58,13 @@ public class Login extends AppCompatActivity {
     }
 
     /**
-     * Initializes the login activity, sets up UI elements, theme switching, and button actions.
-     * Configures Firebase Authentication instance and handles user interactions for login.
+     * Initializes the login activity, sets up UI elements, theme switching, and
+     * button actions.
+     * Configures Firebase Authentication instance and handles user interactions for
+     * login.
      *
-     * @param savedInstanceState Bundle containing the activity's previously saved state.
+     * @param savedInstanceState Bundle containing the activity's previously saved
+     *                           state.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,20 +77,6 @@ public class Login extends AppCompatActivity {
         editPassword = findViewById(R.id.password);
         progressBar = findViewById(R.id.progressBar);
         registerNow = findViewById(R.id.registerNow);
-        themeSwitch = findViewById(R.id.themeSwitch);
-
-        // Set up the theme switch feature
-        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
-        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
-        AppCompatDelegate.setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-        themeSwitch.setChecked(isNightMode);
-
-        themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("night_mode", isChecked);
-            editor.apply();
-            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-        });
 
         registerNow.setOnClickListener(new View.OnClickListener() {
             /**
@@ -100,7 +96,8 @@ public class Login extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             /**
              * Handles the click event for the "Login" button.
-             * Validates email and password inputs, then attempts to log in the user via Firebase Authentication.
+             * Validates email and password inputs, then attempts to log in the user via
+             * Firebase Authentication.
              *
              * @param view The view that was clicked.
              */
@@ -125,7 +122,8 @@ public class Login extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             /**
                              * Callback triggered when Firebase Authentication completes login attempt.
-                             * If successful, redirects to the main activity; otherwise, shows an error message.
+                             * If successful, redirects to the main activity; otherwise, shows an error
+                             * message.
                              *
                              * @param task The result of the Firebase authentication attempt.
                              */
@@ -133,11 +131,9 @@ public class Login extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    // Sign in success, redirect to main activity page
-                                    Toast.makeText(getApplicationContext(), "Login Success", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    // Fetch the user's theme preference
+                                    fetchUserThemePreference(email);
+
                                 } else {
                                     // sign in fails
                                     Toast.makeText(Login.this, "Authentication failed.",
@@ -147,5 +143,61 @@ public class Login extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    private void fetchUserThemePreference(String userEmail) {
+        new Thread(() -> {
+            try {
+                URL url = new URL(Config.API_URL + "user/theme?userEmail=" + userEmail);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        response.append(line);
+                    }
+                    in.close();
+
+                    JSONObject jsonResponse = new JSONObject(response.toString());
+                    boolean isNightMode = jsonResponse.getBoolean("theme");
+
+                    runOnUiThread(() -> {
+                        // Save theme preference locally
+                        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("night_mode", isNightMode);
+                        editor.apply();
+
+                        // Apply theme and redirect to main activity
+                        AppCompatDelegate.setDefaultNightMode(
+                                isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+                        Toast.makeText(getApplicationContext(), "Login Success", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        Toast.makeText(Login.this, "Failed to load theme preference.", Toast.LENGTH_SHORT).show();
+                        // Proceed to main activity even if theme fetch fails
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    });
+                }
+                conn.disconnect();
+            } catch (Exception e) {
+                runOnUiThread(() -> {
+                    Toast.makeText(Login.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    // Proceed to main activity even if there's an error
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                });
+            }
+        }).start();
     }
 }
