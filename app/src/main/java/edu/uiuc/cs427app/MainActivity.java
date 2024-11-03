@@ -99,21 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        // Set up the theme switch feature
-        // SharedPreferences sharedPreferences = getSharedPreferences("settings",
-        // MODE_PRIVATE);
-        // boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
-        // themeSwitch.setChecked(isNightMode);
-
-        // themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-        // SharedPreferences.Editor editor = sharedPreferences.edit();
-        // editor.putBoolean("night_mode", isChecked);
-        // editor.apply();
-        // AppCompatDelegate.setDefaultNightMode(
-        // isChecked ? AppCompatDelegate.MODE_NIGHT_YES :
-        // AppCompatDelegate.MODE_NIGHT_NO);
-        // });
-
         // Initializing the UI components
         cityButtonMap = new HashMap<>();
         // Find the container for the city list
@@ -240,6 +225,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /**
+     * Applies the theme mode based on the saved user preference.
+     * Retrieves the theme mode preference from SharedPreferences,
+     * and sets the app's night mode accordingly.
+     * If "night_mode" is set to true in SharedPreferences, the app
+     * will switch to dark mode. Otherwise, it will remain in light mode.
+     */
     private void applyThemeFromPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
         boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
