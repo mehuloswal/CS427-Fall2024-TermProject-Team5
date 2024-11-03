@@ -30,7 +30,7 @@ def get_city():
     user_cities = UserCity.query.filter_by(user_id=user.id).all()
     city_names = [City.query.get(user_city.city_id).city_name for user_city in user_cities]
     
-    return jsonify(city_names), 200
+    return jsonify(city_names)
 
 @user_city_bp.route('/addCity', methods=['POST'])
 def add_city():
@@ -81,3 +81,30 @@ def add_city():
     db.session.commit()
 
     return jsonify({"message": "City added successfully"}), 200
+
+@user_city_bp.route('/removeCity', methods=['DELETE'])
+def remove_city():
+    data = request.get_json()
+    city_name = data.get('cityName')
+    user_email = data.get('userEmail')
+
+    # Check if user exists
+    user = User.query.filter_by(email=user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # Check if city exists
+    city = City.query.filter_by(city_name=city_name).first()
+    if not city:
+        return jsonify({"error": "City not found"}), 404
+
+    # Check if the user-city relationship exists
+    user_city = UserCity.query.filter_by(user_id=user.id, city_id=city.id).first()
+    if not user_city:
+        return jsonify({"error": "City not associated with the user"}), 404
+
+    # Remove the UserCity relationship
+    db.session.delete(user_city)
+    db.session.commit()
+
+    return jsonify({"message": "City removed successfully"}), 200
