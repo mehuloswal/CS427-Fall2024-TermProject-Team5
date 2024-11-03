@@ -54,9 +54,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * States initialization in the MainActivity
+     * 
      * @param savedInstanceState If the activity is being re-initialized after
-     *     previously being shut down then this Bundle contains the data it most
-     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *                           previously being shut down then this Bundle
+     *                           contains the data it most
+     *                           recently supplied in {@link #onSaveInstanceState}.
+     *                           <b><i>Note: Otherwise it is null.</i></b>
      *
      */
     @Override
@@ -64,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        auth= FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         logoutBtn = findViewById(R.id.logout_btn);
         themeSwitch = findViewById(R.id.themeSwitch);
 
@@ -75,8 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             finish();
         } else {
             // fetch user preference
-            fetchUserThemePreference();
-            // Displays user email
+            applyThemeFromPreferences();
             loadCitiesFromServer(user.getEmail());
             String teamNumber = getString(R.string.app_name);
             getSupportActionBar().setTitle(teamNumber + " - " + user.getEmail());
@@ -85,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             /**
              * Logs user out and redirects user to Login page
+             * 
              * @param view The view that was clicked.
              */
             @Override
@@ -99,16 +102,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Set up the theme switch feature
         SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
         boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
-        AppCompatDelegate
-                .setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         themeSwitch.setChecked(isNightMode);
 
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // Switches theme
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("night_mode", isChecked);
             editor.apply();
-            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+            AppCompatDelegate.setDefaultNightMode(
+                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         });
 
         // Initializing the UI components
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * The logistic control for the Details button for each added city on the layout
+     * 
      * @param view The view that was clicked.
      */
     @Override
@@ -148,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * Fetch the list of cities from the backend server via RESTful APIs
+     * 
      * @param userEmail The logged in user's email
      */
     private void loadCitiesFromServer(String userEmail) {
@@ -174,18 +177,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         updateCityList(response.toString());
                     });
                 } else {
-                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to load cities.", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to load cities.", Toast.LENGTH_SHORT)
+                            .show());
                 }
                 conn.disconnect();
             } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                runOnUiThread(
+                        () -> Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         }).start();
     }
 
     /**
-     * Dynamically and programmatically updates the list of cities in the MainActivity layout
+     * Dynamically and programmatically updates the list of cities in the
+     * MainActivity layout
      * This function parses jsonCityList (as an array of city names)
+     * 
      * @param jsonCityList The list of cities in Json string format
      */
     private void updateCityList(String jsonCityList) {
@@ -231,46 +238,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void fetchUserThemePreference() {
-        new Thread(() -> {
-            try {
-                URL url = new URL(Config.API_URL + "user/theme?userEmail=" + user.getEmail());
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-
-                int responseCode = conn.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = in.readLine()) != null) {
-                        response.append(line);
-                    }
-                    in.close();
-
-                    // Parse the response to get the theme preference
-                    JSONObject jsonResponse = new JSONObject(response.toString());
-                    boolean isNightMode = jsonResponse.getBoolean("theme");
-
-                    runOnUiThread(() -> {
-                        // Apply theme preference
-                        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean("night_mode", isNightMode);
-                        editor.apply();
-                        AppCompatDelegate.setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-                        themeSwitch.setChecked(isNightMode);
-                    });
-                } else {
-                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to load theme preference.", Toast.LENGTH_SHORT).show());
-                }
-                conn.disconnect();
-            } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-            }
-        }).start();
+    private void applyThemeFromPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
+        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
+        AppCompatDelegate
+                .setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
     }
 
-
 }
-
