@@ -51,4 +51,25 @@ def get_user(id):
         "email": user.email,
         "theme": user.theme,
         "extended_theme": user.extended_theme
-    })
+    }), 200
+
+
+@users_bp.route('/user/theme/<emailAddress>', methods=['GET'])
+def get_user_by_email(emailAddress):
+    """
+    Retrieve a user's theme settings by their email address.
+    
+    Args:
+        emailAddress (str): The user's email address
+    
+    Returns:
+        tuple: (JSON response, HTTP status code)
+        - Success: ({"theme": bool}, 200)
+        - Error: ({"error": "User not found"}, 404)
+    """
+    user = User.query.filter_by(email=emailAddress).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify({
+        "theme": user.theme,
+    }), 200
