@@ -38,7 +38,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class Register extends AppCompatActivity {
 
-    TextInputEditText editUsername, editPassword;
+    TextInputEditText editUsername, editPassword, editConfirmPassword;
     Button buttonReg;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
@@ -47,7 +47,8 @@ public class Register extends AppCompatActivity {
 
     /**
      * Called when the activity is starting.
-     * Checks if the user is already signed in and redirects to the main activity if so.
+     * Checks if the user is already signed in and redirects to the main activity if
+     * so.
      */
     @Override
     public void onStart() {
@@ -62,10 +63,12 @@ public class Register extends AppCompatActivity {
     }
 
     /**
-     * Initializes the activity, sets up the UI components, and configures the theme switch and
+     * Initializes the activity, sets up the UI components, and configures the theme
+     * switch and
      * registration functionality.
      *
-     * @param savedInstanceState Bundle object containing the activity's previously saved state.
+     * @param savedInstanceState Bundle object containing the activity's previously
+     *                           saved state.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,7 @@ public class Register extends AppCompatActivity {
         buttonReg = findViewById(R.id.btn_register);
         editUsername = findViewById(R.id.username);
         editPassword = findViewById(R.id.password);
+        editConfirmPassword = findViewById(R.id.confirmPassword);
         progressBar = findViewById(R.id.progressBar);
         loginNow = findViewById(R.id.loginNow);
         themeSwitch = findViewById(R.id.themeSwitch);
@@ -124,6 +128,20 @@ public class Register extends AppCompatActivity {
                 String username, password;
                 username = editUsername.getText().toString();
                 password = editPassword.getText().toString();
+                String confirmPassword = editConfirmPassword.getText().toString();
+
+                // Checking if the fields are empty
+                if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
+                    Toast.makeText(Register.this, "All fields are required", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    return;
+                }
+                // Checking if the password and confirm password match
+                if (!password.equals(confirmPassword)) {
+                    Toast.makeText(Register.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    return;
+                }
 
                 // Regular expression to detect email-like patterns
                 Pattern emailPattern = Pattern.compile("@.*\\..*");
@@ -131,20 +149,14 @@ public class Register extends AppCompatActivity {
 
                 // Check if username contains an email-like pattern
                 if (matcher.find()) {
-                    Toast.makeText(Register.this, "Username should not contain '@domain'. It will be appended automatically as '@illinois.edu'.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this,
+                            "Username should not contain '@domain'. It will be appended automatically as '@illinois.edu'.",
+                            Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
 
                 String email = username + "@illinois.edu";
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(Register.this, "Please enter user name", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(Register.this, "Please enter password", Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
                 Task<AuthResult> createUserTask = mAuth.createUserWithEmailAndPassword(email, password);
 
@@ -171,7 +183,8 @@ public class Register extends AppCompatActivity {
      * Displays success or failure message based on the server response.
      *
      * @param email      The email address of the registered user.
-     * @param isDarkMode The user's theme preference (dark mode enabled or disabled).
+     * @param isDarkMode The user's theme preference (dark mode enabled or
+     *                   disabled).
      */
     private void sendUserToBackend(String email, boolean isDarkMode) {
         new Thread(() -> {
