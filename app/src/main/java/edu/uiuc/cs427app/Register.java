@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -122,6 +124,18 @@ public class Register extends AppCompatActivity {
                 String username, password;
                 username = editUsername.getText().toString();
                 password = editPassword.getText().toString();
+
+                // Regular expression to detect email-like patterns
+                Pattern emailPattern = Pattern.compile("@.*\\..*");
+                Matcher matcher = emailPattern.matcher(username);
+
+                // Check if username contains an email-like pattern
+                if (matcher.find()) {
+                    Toast.makeText(Register.this, "Username should not contain '@domain'. It will be appended automatically as '@illinois.edu'.", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    return;
+                }
+
                 String email = username + "@illinois.edu";
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(Register.this, "Please enter user name", Toast.LENGTH_SHORT).show();
