@@ -26,6 +26,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class AddLocation extends AppCompatActivity {
 
     private AutoCompleteTextView cityAutoCompleteTextView;
@@ -33,10 +37,12 @@ public class AddLocation extends AppCompatActivity {
     private List<String> cityList = new ArrayList<>(); // List to hold city names
 
     /**
-     * Initializes the activity, sets up the UI elements, loads available cities from the server,
+     * Initializes the activity, sets up the UI elements, loads available cities
+     * from the server,
      * and configures the button click event to handle city addition.
      *
-     * @param savedInstanceState Bundle object containing the activity's previously saved state.
+     * @param savedInstanceState Bundle object containing the activity's previously
+     *                           saved state.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +52,18 @@ public class AddLocation extends AppCompatActivity {
         cityAutoCompleteTextView = findViewById(R.id.cityAutoCompleteTextView);
         addCityButton = findViewById(R.id.addCityButton);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String teamNumber = getString(R.string.app_name);
+        getSupportActionBar().setTitle(teamNumber + " - " + user.getEmail().split("@")[0]);
+
         // Load cities from server for dropdown
         loadCitiesFromServer();
 
         addCityButton.setOnClickListener(new View.OnClickListener() {
             /**
              * Handles the click event for the "Add City" button.
-             * Retrieves the selected city name and user email, then calls addCityToServer if valid.
+             * Retrieves the selected city name and user email, then calls addCityToServer
+             * if valid.
              *
              * @param v The view that was clicked.
              */
@@ -72,7 +83,8 @@ public class AddLocation extends AppCompatActivity {
     }
 
     /**
-     * Fetches the list of available cities from the server and updates the autocomplete dropdown.
+     * Fetches the list of available cities from the server and updates the
+     * autocomplete dropdown.
      * Runs a network operation on a background thread to get city data.
      * On successful retrieval, updates the city list UI in the main thread.
      */
@@ -122,7 +134,7 @@ public class AddLocation extends AppCompatActivity {
      * On success, returns to the main activity and displays a success message.
      * If unsuccessful, displays an error message to the user.
      *
-     * @param cityName The name of the city to add.
+     * @param cityName  The name of the city to add.
      * @param userEmail The email of the user adding the city.
      */
     private void addCityToServer(String cityName, String userEmail) {

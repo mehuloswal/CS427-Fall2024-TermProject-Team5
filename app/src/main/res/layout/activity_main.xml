@@ -72,10 +72,10 @@
         android:padding="12dp"
         android:textSize="16sp"
         android:layout_marginTop="16dp" />
-    <Switch
+    <!-- <Switch
         android:id="@+id/themeSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dark Mode" />
+        android:text="Dark Mode" /> -->
 
 </LinearLayout>

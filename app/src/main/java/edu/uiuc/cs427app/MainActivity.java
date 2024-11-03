@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         auth = FirebaseAuth.getInstance();
         logoutBtn = findViewById(R.id.logout_btn);
-        themeSwitch = findViewById(R.id.themeSwitch);
+        // themeSwitch = findViewById(R.id.themeSwitch);
 
         user = auth.getCurrentUser();
         if (user == null) {
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             applyThemeFromPreferences();
             loadCitiesFromServer(user.getEmail());
             String teamNumber = getString(R.string.app_name);
-            getSupportActionBar().setTitle(teamNumber + " - " + user.getEmail());
+            getSupportActionBar().setTitle(teamNumber + " - " + user.getEmail().split("@")[0]);
         }
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -100,17 +100,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         // Set up the theme switch feature
-        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
-        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
-        themeSwitch.setChecked(isNightMode);
+        // SharedPreferences sharedPreferences = getSharedPreferences("settings",
+        // MODE_PRIVATE);
+        // boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
+        // themeSwitch.setChecked(isNightMode);
 
-        themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("night_mode", isChecked);
-            editor.apply();
-            AppCompatDelegate.setDefaultNightMode(
-                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-        });
+        // themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        // SharedPreferences.Editor editor = sharedPreferences.edit();
+        // editor.putBoolean("night_mode", isChecked);
+        // editor.apply();
+        // AppCompatDelegate.setDefaultNightMode(
+        // isChecked ? AppCompatDelegate.MODE_NIGHT_YES :
+        // AppCompatDelegate.MODE_NIGHT_NO);
+        // });
 
         // Initializing the UI components
         cityButtonMap = new HashMap<>();
