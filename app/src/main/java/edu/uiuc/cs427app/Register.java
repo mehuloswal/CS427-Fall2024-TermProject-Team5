@@ -36,7 +36,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class Register extends AppCompatActivity {
 
-    TextInputEditText editEmail, editPassword;
+    TextInputEditText editUsername, editPassword;
     Button buttonReg;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
@@ -73,7 +73,7 @@ public class Register extends AppCompatActivity {
         // Initialize the views variables, add whatever necessary
         mAuth = FirebaseAuth.getInstance();
         buttonReg = findViewById(R.id.btn_register);
-        editEmail = findViewById(R.id.email);
+        editUsername = findViewById(R.id.username);
         editPassword = findViewById(R.id.password);
         progressBar = findViewById(R.id.progressBar);
         loginNow = findViewById(R.id.loginNow);
@@ -119,11 +119,12 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-                String email, password;
-                email = editEmail.getText().toString();
+                String username, password;
+                username = editUsername.getText().toString();
                 password = editPassword.getText().toString();
+                String email = username + "@illinois.edu";
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(Register.this, "Please enter email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, "Please enter user name", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
@@ -133,6 +134,7 @@ public class Register extends AppCompatActivity {
 
                 Task<AuthResult> createUserTask = mAuth.createUserWithEmailAndPassword(email, password);
 
+                // If failed, log the error to user
                 createUserTask.addOnFailureListener(exception -> {
                     Toast.makeText(Register.this, exception.getMessage(), Toast.LENGTH_LONG).show();
                 });

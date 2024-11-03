@@ -27,7 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity {
-    TextInputEditText editEmail, editPassword;
+    TextInputEditText editUsername, editPassword;
     Button buttonLogin;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
@@ -63,7 +63,7 @@ public class Login extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         buttonLogin = findViewById(R.id.btn_login);
-        editEmail = findViewById(R.id.email);
+        editUsername = findViewById(R.id.username);
         editPassword = findViewById(R.id.password);
         progressBar = findViewById(R.id.progressBar);
         registerNow = findViewById(R.id.registerNow);
@@ -107,11 +107,13 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-                String email, password;
-                email = editEmail.getText().toString();
+                String username, password;
+                username = editUsername.getText().toString();
                 password = editPassword.getText().toString();
+
+                String email = username + "@illinois.edu";
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(Login.this, "Please enter email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Please enter username", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
