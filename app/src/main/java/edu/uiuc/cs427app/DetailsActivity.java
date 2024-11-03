@@ -50,22 +50,29 @@ public class DetailsActivity extends AppCompatActivity {
         // Display city information
         welcomeMessage.setText("Welcome to the " + cityName);
         cityInfoMessage.setText("Detailed information about the weather of " + cityName);
-
-        // Map button listener
-        // buttonMap.setOnClickListener(view -> {
-        // // Navigate to Map Activity
-        // Intent mapIntent = new Intent(DetailsActivity.this, MapActivity.class);
-        // mapIntent.putExtra("city", cityName);
-        // startActivity(mapIntent);
-        // });
     }
 
+    /**
+     * Creates the options menu for the activity.
+     * Inflates the menu resource containing the delete option.
+     *
+     * @param menu The options menu in which items are placed
+     * @return true for the menu to be displayed
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.details_menu, menu);
         return true;
     }
 
+    /**
+     * Handles selection of menu items in the options menu.
+     * Currently handles the delete action for removing a city.
+     *
+     * @param item The menu item that was selected
+     * @return boolean Return false to allow normal menu processing to proceed,
+     *         true to consume it here
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_delete) {
@@ -75,6 +82,11 @@ public class DetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Displays a confirmation dialog before deleting a city.
+     * Shows an AlertDialog with yes/no options to confirm deletion.
+     * If user confirms, proceeds with city deletion.
+     */
     private void showDeleteConfirmationDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Delete City")
@@ -84,6 +96,20 @@ public class DetailsActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Handles the deletion of a city from the user's list.
+     * Makes an HTTP DELETE request to the backend server to remove the city.
+     * If successful, returns to the MainActivity.
+     *
+     * The method:
+     * 1. Verifies user and city data are available
+     * 2. Makes an HTTP request to remove the city
+     * 3. Handles the response and shows appropriate feedback
+     * 4. Returns to MainActivity on successful deletion
+     *
+     * @throws Exception If there's an error in the network communication
+     *                   or JSON processing
+     */
     private void deleteCity() {
         if (user != null && cityName != null) {
             String userEmail = user.getEmail();

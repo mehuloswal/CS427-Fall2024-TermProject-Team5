@@ -39,7 +39,6 @@ public class Login extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView registerNow;
-    Switch themeSwitch;
 
     /**
      * Checks if the user is already signed in when the activity starts.
@@ -145,6 +144,20 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    /**
+     * Fetches and applies the user's theme preference from the backend server.
+     *
+     * This method:
+     * - Makes an HTTP request to fetch theme preference
+     * - Saves the preference locally
+     * - Applies the theme setting
+     * - Navigates to MainActivity on completion
+     *
+     * If the theme fetch fails, the method still proceeds to MainActivity
+     * with default theme settings.
+     *
+     * @param userEmail The email address of the authenticated user
+     */
     private void fetchUserThemePreference(String userEmail) {
         new Thread(() -> {
             try {
