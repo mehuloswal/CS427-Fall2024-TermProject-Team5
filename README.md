@@ -83,37 +83,37 @@ Meeting notes: Iteratively working on building the class diagram initially. Afte
 
 <b>Week 4</b>
 </br>
-Members present: List the NetID of the people who attended the meeting
+Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6, rajan11, ac163
 </br>
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: Assigning tasks. Discussion the stack for backend. Figuring out the APIs for cities and the design for the backend architecture.
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
+| mehuljo2 | Completed tasks and final design for all diagrams for previous milestone. Reviewing Milestone 3. | Start working towards and coordinate with all members. |
+| pranav31 | Provided Intial Design for the backend for Milestone3. Figuring out other APIs required for further milestone. | APIs to fetch cities from backend |
+| wenqi6 | Read the document and provided insights on Milestone 3. | Assigned task to configure main activity and theming for the entire application. |
+| rajan11 | Read the document and provided insights on Milestone 3. | Assigned task to work on adding and removing the cities for the user. |
+| zexinl2 | Read the document and provided insights on Milestone 3. | Assigned task to configure main activity and theming for the entire application. |
+| ac163 | Read the document and provided insights on Milestone 3. | Assigned task to work on adding and removing the cities for the user. |
+| ruipeng2 | Read about the methods and ways to implement the entire application. | Assigned to work on authentication part entirely. |
 | | | |
 </br>
 
 <b>Week 5</b>
 </br>
-Members present: List the NetID of the people who attended the meeting
+Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6, rajan11, ac163
 </br>
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: Discussed Potential bugs and ways to fix it. Figuring out final auth design with Firebase and local sqlite3 database. Re-intializing the entire backend. Saving Cities to the local database and writing APIs to fetch (GET/POST)
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
+| mehuljo2 | Completed Assigning Tasks and workng on backend entirely. Worked on APIs for the 3 tables in sqllite. Discussed with Ray to further track the issues. | Complete the Milestone 3 video and solve all the bugs associated with it and start working on milestone 4.|
+| pranav31 | Fixed all docstrings for python and added an API to fetch theme for the user. | Wrap up the remaining parts for Milestone 3 and start working on milestone 4. |
+| wenqi6 | Worked on theming for the entire application with Zexin. | Work on theme bugs and start working on milestone 4. |
+| rajan11 | Worked on designing add and remove cities with Aris.  | Start working on Milestone 4. |
+| zexinl2 | Worked on theming for the entire application with Wenqi. | Complete the final theme fetch after logging and Start working on milestone 4 |
+| ac163 | Worked with Sujithra on adding and removing cities with Sujithra. | Start working on Milestone 4. |
+| ruipeng2 | Work on Auth Login/Register Page and Configuring the Main Acitivity and completing milestone 3.| Start working on milestone 4.  |
 | | | |
 </br>
 
