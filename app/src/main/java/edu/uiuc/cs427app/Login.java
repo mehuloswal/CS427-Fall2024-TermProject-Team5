@@ -77,9 +77,11 @@ public class Login extends AppCompatActivity {
 
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("night_mode", isChecked);
-            editor.apply();
-            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+            if (isChecked != isNightMode) {
+                editor.putBoolean("night_mode", isChecked);
+                editor.apply();
+                AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+            }
         });
 
         registerNow.setOnClickListener(new View.OnClickListener() {
