@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Switch themeSwitch;
 
+    boolean nightMode = false;
+
     /**
      * States initialization in the MainActivity
      * @param savedInstanceState If the activity is being re-initialized after
@@ -94,17 +96,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         // Set up the theme switch feature
-        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
-        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
-        AppCompatDelegate
-                .setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-        themeSwitch.setChecked(isNightMode);
+//        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
+//        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
+//        AppCompatDelegate
+//                .setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        themeSwitch.setChecked(nightMode);
 
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Switches theme
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("night_mode", isChecked);
-            editor.apply();
+//            SharedPreferences.Editor editor = getSharedPreferences("settings", MODE_PRIVATE).edit();
+//            editor.putBoolean("night_mode", isChecked);
+//            editor.apply();
+            nightMode = isChecked;
             AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         });
 
