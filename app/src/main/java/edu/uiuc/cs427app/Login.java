@@ -87,7 +87,7 @@ public class Login extends AppCompatActivity {
 
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            if (isChecked != isNightMode) {
+            if (buttonView.isPressed()) {
                 editor.putBoolean("night_mode", isChecked);
                 editor.apply();
                 AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);

@@ -79,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             finish();
         } else {
-            // fetch user preference
-//            applyThemeFromPreferences();
             loadCitiesFromServer(user.getEmail());
             String teamNumber = getString(R.string.app_name);
             getSupportActionBar().setTitle(teamNumber + " - " + user.getEmail().split("@")[0]);
@@ -101,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        // Set up the theme switch feature
+        // Fetch user preference and set up the theme switch feature
         SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
         boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
         themeSwitch.setChecked(isNightMode);
@@ -228,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // Details Button
                 Button detailsButton = new Button(new ContextThemeWrapper(this, R.style.Theme_MyFirstApp));
-                detailsButton.setText("Show Details");
+                detailsButton.setText("Weather");
                 detailsButton.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 int detailsButtonId = View.generateViewId();
@@ -269,20 +267,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.latitude = latitude;
             this.longitude = longitude;
         }
-    }
-
-    /**
-     * Applies the theme mode based on the saved user preference.
-     * Retrieves the theme mode preference from SharedPreferences,
-     * and sets the app's night mode accordingly.
-     * If "night_mode" is set to true in SharedPreferences, the app
-     * will switch to dark mode. Otherwise, it will remain in light mode.
-     */
-    private void applyThemeFromPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
-        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
-        AppCompatDelegate
-                .setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
     }
 
 }
