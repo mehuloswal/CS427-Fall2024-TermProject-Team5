@@ -39,6 +39,7 @@ public class Login extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView registerNow;
+    Switch themeSwitch;
 
     /**
      * Checks if the user is already signed in when the activity starts.
@@ -76,6 +77,22 @@ public class Login extends AppCompatActivity {
         editPassword = findViewById(R.id.password);
         progressBar = findViewById(R.id.progressBar);
         registerNow = findViewById(R.id.registerNow);
+        themeSwitch = findViewById(R.id.themeSwitch);
+
+        // Set up the theme switch feature
+        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
+        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
+        AppCompatDelegate.setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        themeSwitch.setChecked(isNightMode);
+
+        themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            if (isChecked != isNightMode) {
+                editor.putBoolean("night_mode", isChecked);
+                editor.apply();
+                AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
 
         registerNow.setOnClickListener(new View.OnClickListener() {
             /**
