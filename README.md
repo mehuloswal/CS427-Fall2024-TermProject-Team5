@@ -4,7 +4,7 @@ The code for CS427 Android app.
 <br/>
 <br/>
 
-<b>Team # member information</b>
+<b>Team 5 member information</b>
 <br/>
 | Name | NetID | GitHub ID | Role | Experience |
 | ------------- | ------------- | ------------| ------------- | ----------------------------------|
