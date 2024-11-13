@@ -33,9 +33,17 @@ def get_city():
 
     # Fetching all cities associated with the user
     user_cities = UserCity.query.filter_by(user_id=user.id).all()
-    city_names = [City.query.get(user_city.city_id).city_name for user_city in user_cities]
-    
-    return jsonify(city_names)
+    cities_list = []
+    for user_city in user_cities:
+        city = City.query.get(user_city.city_id)
+        if city:
+            city_data = {
+                "city_name": city.city_name,
+                "latitude": city.latitude,
+                "longitude": city.longitude
+            }
+            cities_list.append(city_data)
+    return jsonify(cities_list)
 
 
 @user_city_bp.route('/addCity', methods=['POST'])

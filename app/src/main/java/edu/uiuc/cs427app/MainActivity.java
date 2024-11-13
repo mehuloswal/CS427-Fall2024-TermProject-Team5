@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Maps Button ID to its Name
     private HashMap<Integer, String> cityButtonMap;
 
+    private HashMap<Integer, CityData> mapButtonMap;
+
     FirebaseAuth auth;
     FirebaseUser user;
     Button logoutBtn;
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Initializing the UI components
         cityButtonMap = new HashMap<>();
+        mapButtonMap = new HashMap<>();
         // Find the container for the city list
         cityListContainer = findViewById(R.id.cityListContainer);
 
@@ -117,21 +120,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         Intent intent;
         int id = view.getId();
-        switch (id) {
-            case R.id.buttonAddLocation:
-                // Implement this action to add a new location to the list of locations
-                intent = new Intent(MainActivity.this, AddLocation.class);
-                startActivity(intent);
-                break;
-            default:
-                if (!cityButtonMap.containsKey(id)) {
-                    Toast.makeText(MainActivity.this, "Error: unknown id", Toast.LENGTH_SHORT).show();
-                } else {
-                    intent = new Intent(this, DetailsActivity.class);
-                    intent.putExtra("city", cityButtonMap.get(id));
-                    startActivity(intent);
-                }
-                break;
+        if (id == R.id.buttonAddLocation) {
+            intent = new Intent(MainActivity.this, AddLocation.class);
+            startActivity(intent);
+        } else if (cityButtonMap.containsKey(id)) {
+            // Details button clicked
+            intent = new Intent(this, DetailsActivity.class);
+            intent.putExtra("city", cityButtonMap.get(id));
+            startActivity(intent);
+        } else if (mapButtonMap.containsKey(id)) {
+            // Map button clicked
+            CityData cityData = mapButtonMap.get(id);
+            intent = new Intent(this, MapActivity.class);
+            intent.putExtra("cityName", cityData.cityName);
+            intent.putExtra("latitude", cityData.latitude);
+            intent.putExtra("longitude", cityData.longitude);
+            startActivity(intent);
+        } else {
+            Toast.makeText(MainActivity.this, "Error: unknown id", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -185,12 +191,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void updateCityList(String jsonCityList) {
         try {
             cityListContainer.removeAllViews();
-            cityButtonMap.clear(); // Clear previous mappings
+            cityButtonMap.clear();
+            mapButtonMap.clear();
 
             JSONArray cityArray = new JSONArray(jsonCityList);
-
             for (int i = 0; i < cityArray.length(); i++) {
-                String cityName = cityArray.getString(i);
+                JSONObject cityObject = cityArray.getJSONObject(i);
+                String cityName = cityObject.getString("city_name");
+                double latitude = cityObject.getDouble("latitude");
+                double longitude = cityObject.getDouble("longitude");
 
                 LinearLayout cityLayout = new LinearLayout(this);
                 cityLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -202,27 +211,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cityTextView.setText(cityName);
                 cityTextView.setTextSize(16);
 
+                // Details Button
                 Button detailsButton = new Button(new ContextThemeWrapper(this, R.style.Theme_MyFirstApp));
                 detailsButton.setText("Show Details");
                 detailsButton.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                int buttonId = View.generateViewId(); // Generate a unique ID
-                detailsButton.setId(buttonId);
-
-                // Add the button ID and city name to the HashMap
-                cityButtonMap.put(buttonId, cityName);
-
-                // Set OnClickListener for the button
+                int detailsButtonId = View.generateViewId();
+                detailsButton.setId(detailsButtonId);
+                cityButtonMap.put(detailsButtonId, cityName);
                 detailsButton.setOnClickListener(this);
+
+                // Map Button
+                Button mapButton = new Button(new ContextThemeWrapper(this, R.style.Theme_MyFirstApp));
+                mapButton.setText("Show Map");
+                mapButton.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                int mapButtonId = View.generateViewId();
+                mapButton.setId(mapButtonId);
+                CityData cityData = new CityData(cityName, latitude, longitude);
+                mapButtonMap.put(mapButtonId, cityData);
+                mapButton.setOnClickListener(this);
 
                 cityLayout.addView(cityTextView);
                 cityLayout.addView(detailsButton);
+                cityLayout.addView(mapButton);
+
                 cityListContainer.addView(cityLayout);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
 
+    // Helper class to store city data
+    private class CityData {
+        String cityName;
+        double latitude;
+        double longitude;
+
+        CityData(String cityName, double latitude, double longitude) {
+            this.cityName = cityName;
+            this.latitude = latitude;
+            this.longitude = longitude;
+        }
     }
 
     /**
