@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private HashMap<Integer, CityData> mapButtonMap;
 
+    private HashMap<Integer, CityData> weatherButtonMap;
+
     FirebaseAuth auth;
     FirebaseUser user;
     Button logoutBtn;
@@ -117,6 +119,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Initializing the UI components
         cityButtonMap = new HashMap<>();
         mapButtonMap = new HashMap<>();
+        weatherButtonMap = new HashMap<>();
+
         // Find the container for the city list
         cityListContainer = findViewById(R.id.cityListContainer);
 
@@ -138,8 +142,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         } else if (cityButtonMap.containsKey(id)) {
             // Details button clicked
+            CityData cityData = weatherButtonMap.get(id);
             intent = new Intent(this, DetailsActivity.class);
             intent.putExtra("city", cityButtonMap.get(id));
+            intent.putExtra("cityName", cityData.cityName);
+            intent.putExtra("latitude", cityData.latitude);
+            intent.putExtra("longitude", cityData.longitude);
             startActivity(intent);
         } else if (mapButtonMap.containsKey(id)) {
             // Map button clicked
@@ -206,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             cityListContainer.removeAllViews();
             cityButtonMap.clear();
             mapButtonMap.clear();
+            weatherButtonMap.clear();
 
             JSONArray cityArray = new JSONArray(jsonCityList);
             for (int i = 0; i < cityArray.length(); i++) {
@@ -232,6 +241,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int detailsButtonId = View.generateViewId();
                 detailsButton.setId(detailsButtonId);
                 cityButtonMap.put(detailsButtonId, cityName);
+                CityData cityData = new CityData(cityName, latitude, longitude);
+                weatherButtonMap.put(detailsButtonId, cityData);
                 detailsButton.setOnClickListener(this);
 
                 // Map Button
@@ -241,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 int mapButtonId = View.generateViewId();
                 mapButton.setId(mapButtonId);
-                CityData cityData = new CityData(cityName, latitude, longitude);
+                cityData = new CityData(cityName, latitude, longitude);
                 mapButtonMap.put(mapButtonId, cityData);
                 mapButton.setOnClickListener(this);
 
