@@ -27,8 +27,8 @@ import com.google.ai.client.generativeai.type.GenerateContentResponse;
 
 public class WeatherInsightsActivity extends AppCompatActivity {
 
+    private static final String TAG = "WeatherInsightsActivity";
     private String weatherData;
-
     private String apiKey = Config.GEMINI_KEY;
 
     private ProgressBar progressBar;
@@ -50,10 +50,10 @@ public class WeatherInsightsActivity extends AppCompatActivity {
 
         responseTitle.setVisibility(View.GONE);
 
-        // TODO: CHANGE THIS HARDCODED WEATHER DATA!
         // Fetch weather data passed from DetailsActivity
-        weatherData = "a beautiful sunny day with clear skies and a warm temperature of 75 " +
-                "degrees Fahrenheit. The gentle breeze at 5 mph makes it perfect for outdoor activities."; // getIntent().getStringExtra("weatherData");
+        weatherData = getIntent().getStringExtra("weatherData");
+
+        Log.d(TAG, "weatherData: " + weatherData);
 
         // Initialize the Gemini model
         GenerativeModel gm = new GenerativeModel("gemini-1.5-flash", apiKey);
@@ -76,7 +76,7 @@ public class WeatherInsightsActivity extends AppCompatActivity {
 
         // Prepare the prompt for question generation
         Content content = new Content.Builder()
-                .addText("Today's weather is " + weatherData + ". Please generate two " +
+                .addText(weatherData + ". Please generate two " +
                         "context-specific questions based on the given weather data that users " +
                         "might ask to help them make decisions about their day. " +
                         "Your response must contain exactly two lines, each is one question")
