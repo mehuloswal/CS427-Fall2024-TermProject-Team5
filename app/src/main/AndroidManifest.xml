@@ -50,6 +50,7 @@
             android:name=".DetailsActivity"
             android:exported="true" />
         <activity android:name=".MapActivity" />
+        <activity android:name=".WeatherActivity" />
     </application>
 
 </manifest>

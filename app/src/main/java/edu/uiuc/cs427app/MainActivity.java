@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private HashMap<Integer, CityData> mapButtonMap;
 
+    private HashMap<Integer, CityData> weatherButtonMap;
+
     FirebaseAuth auth;
     FirebaseUser user;
     Button logoutBtn;
@@ -104,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Initializing the UI components
         cityButtonMap = new HashMap<>();
         mapButtonMap = new HashMap<>();
+        weatherButtonMap = new HashMap<>();
+
         // Find the container for the city list
         cityListContainer = findViewById(R.id.cityListContainer);
 
@@ -132,6 +136,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Map button clicked
             CityData cityData = mapButtonMap.get(id);
             intent = new Intent(this, MapActivity.class);
+            intent.putExtra("cityName", cityData.cityName);
+            intent.putExtra("latitude", cityData.latitude);
+            intent.putExtra("longitude", cityData.longitude);
+            startActivity(intent);
+        }else if (weatherButtonMap.containsKey(id)) {
+            // Weather button clicked
+            CityData cityData = weatherButtonMap.get(id);
+            intent = new Intent(this, WeatherActivity.class);
             intent.putExtra("cityName", cityData.cityName);
             intent.putExtra("latitude", cityData.latitude);
             intent.putExtra("longitude", cityData.longitude);
@@ -193,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             cityListContainer.removeAllViews();
             cityButtonMap.clear();
             mapButtonMap.clear();
+            weatherButtonMap.clear();
 
             JSONArray cityArray = new JSONArray(jsonCityList);
             for (int i = 0; i < cityArray.length(); i++) {
@@ -213,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // Details Button
                 Button detailsButton = new Button(new ContextThemeWrapper(this, R.style.Theme_MyFirstApp));
-                detailsButton.setText("Show Details");
+                detailsButton.setText("Details");
                 detailsButton.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 int detailsButtonId = View.generateViewId();
@@ -223,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // Map Button
                 Button mapButton = new Button(new ContextThemeWrapper(this, R.style.Theme_MyFirstApp));
-                mapButton.setText("Show Map");
+                mapButton.setText("Map");
                 mapButton.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 int mapButtonId = View.generateViewId();
@@ -232,9 +245,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mapButtonMap.put(mapButtonId, cityData);
                 mapButton.setOnClickListener(this);
 
+                // Weather Info Bottom
+                Button weatherButton = new Button(new ContextThemeWrapper(this, R.style.Theme_MyFirstApp));
+                weatherButton.setText("Weather");
+                weatherButton.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                int weatherButtonId = View.generateViewId();
+                weatherButton.setId(weatherButtonId);
+                weatherButtonMap.put(weatherButtonId, cityData);
+                weatherButton.setOnClickListener(this);
+
+                // 创建一个水平的 LinearLayout，用于容纳按钮
+                LinearLayout buttonLayout = new LinearLayout(this);
+                buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+
                 cityLayout.addView(cityTextView);
                 cityLayout.addView(detailsButton);
                 cityLayout.addView(mapButton);
+                cityLayout.addView(weatherButton);
 
                 cityListContainer.addView(cityLayout);
             }
