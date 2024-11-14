@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,11 +46,21 @@ public class DetailsActivity extends AppCompatActivity {
         // Setting up UI elements
         TextView welcomeMessage = findViewById(R.id.welcomeText);
         TextView cityInfoMessage = findViewById(R.id.cityInfo);
-        Button buttonMap = findViewById(R.id.mapButton);
 
         // Display city information
-        welcomeMessage.setText("Welcome to the " + cityName);
+        welcomeMessage.setText("Welcome to " + cityName + "!");
         cityInfoMessage.setText("Detailed information about the weather of " + cityName);
+
+        // Set up the "Weather Insights" button
+        Button weatherInsightsButton = findViewById(R.id.weatherInsightsButton);
+        weatherInsightsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailsActivity.this, WeatherInsightsActivity.class);
+                intent.putExtra("city", cityName);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
