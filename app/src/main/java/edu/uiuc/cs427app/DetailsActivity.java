@@ -19,7 +19,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -27,6 +30,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private String cityName;
     private FirebaseUser user;
+    private TextView temperatureView, weatherView, humidityView, windView;
 
     /**
      * Initializes the DetailsActivity, setting up UI elements to display city information,
@@ -43,13 +47,21 @@ public class DetailsActivity extends AppCompatActivity {
         cityName = getIntent().getStringExtra("city");
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Setting up UI elements
+        // Initialize UI elements
         TextView welcomeMessage = findViewById(R.id.welcomeText);
         TextView cityInfoMessage = findViewById(R.id.cityInfo);
+        temperatureView = findViewById(R.id.temperature);
+        weatherView = findViewById(R.id.weather);
+        humidityView = findViewById(R.id.humidity);
+        windView = findViewById(R.id.wind);
 
         // Display city information
         welcomeMessage.setText("Welcome to " + cityName + "!");
         cityInfoMessage.setText("Detailed information about the weather of " + cityName);
+
+        // TODO: FINISH THIS! assigned to @zexing and @wenqi
+        // Load weather details
+        // loadWeatherDetails();
 
         // Set up the "Weather Insights" button
         Button weatherInsightsButton = findViewById(R.id.weatherInsightsButton);
@@ -58,6 +70,9 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(DetailsActivity.this, WeatherInsightsActivity.class);
                 intent.putExtra("city", cityName);
+                // TODO: We need to gather the weatherData from these views and pass it on to the insight page
+                // TODO: @zexin and @wenqi
+                // intent.putExtra("weatherData", cityName);
                 startActivity(intent);
             }
         });
@@ -167,5 +182,53 @@ public class DetailsActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "User or city data missing.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * TODO: THIS FUNCTION IS NOT TESTED NOR USED!  @zexing and @wenqi need to check this
+     * Loads weather details for the selected city by making an API request.
+     * Displays the fetched temperature, weather, humidity, and wind data in the respective TextViews.
+     */
+    private void loadWeatherDetails() {
+        new Thread(() -> {
+            try {
+                URL url = new URL("http://10.0.2.2:5001/api/getDetails&city=" + cityName);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Content-Type", "application/json");
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String inputLine;
+
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    // Parse JSON response
+                    JSONObject jsonResponse = new JSONObject(response.toString());
+                    String temperature = jsonResponse.optString("temperature", "--") + "°C";
+                    String weather = jsonResponse.optString("weather", "--");
+                    String humidity = jsonResponse.optString("humidity", "--") + "%";
+                    String wind = jsonResponse.optString("wind", "--") + " km/h";
+
+                    // Update UI on the main thread
+                    runOnUiThread(() -> {
+                        temperatureView.setText("Temperature: " + temperature);
+                        weatherView.setText("Weather: " + weather);
+                        humidityView.setText("Humidity: " + humidity);
+                        windView.setText("Wind: " + wind);
+                    });
+                } else {
+                    runOnUiThread(() -> Toast.makeText(DetailsActivity.this, "Failed to load weather data.", Toast.LENGTH_SHORT).show());
+                }
+                conn.disconnect();
+            } catch (Exception e) {
+                runOnUiThread(() -> Toast.makeText(DetailsActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
 }
