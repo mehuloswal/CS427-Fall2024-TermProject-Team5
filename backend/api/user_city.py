@@ -31,7 +31,7 @@ def get_city():
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Fetching all cities associated with the user
+    # Fetching all cities (names with geographic data) associated with the user
     user_cities = UserCity.query.filter_by(user_id=user.id).all()
     cities_list = []
     for user_city in user_cities:
