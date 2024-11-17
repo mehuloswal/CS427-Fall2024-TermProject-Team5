@@ -24,11 +24,11 @@ import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.GenerateContentResponse;
 
-
 public class WeatherInsightsActivity extends AppCompatActivity {
 
     private static final String TAG = "WeatherInsightsActivity";
     private String weatherData;
+    private String cityName;
     private String apiKey = Config.GEMINI_KEY;
 
     private ProgressBar progressBar;
@@ -53,7 +53,10 @@ public class WeatherInsightsActivity extends AppCompatActivity {
         // Fetch weather data passed from DetailsActivity
         weatherData = getIntent().getStringExtra("weatherData");
 
+        cityName = getIntent().getStringExtra("city");
+
         Log.d(TAG, "weatherData: " + weatherData);
+        Log.d(TAG, "city: " + cityName);
 
         // Initialize the Gemini model
         GenerativeModel gm = new GenerativeModel("gemini-1.5-flash", apiKey);
@@ -67,7 +70,8 @@ public class WeatherInsightsActivity extends AppCompatActivity {
     }
 
     /**
-     * Calls the Gemini API to generate context-specific questions based on the provided weather data.
+     * Calls the Gemini API to generate context-specific questions based on the
+     * provided weather data.
      *
      * @param weatherData A string containing current weather details.
      */
@@ -76,10 +80,13 @@ public class WeatherInsightsActivity extends AppCompatActivity {
 
         // Prepare the prompt for question generation
         Content content = new Content.Builder()
-                .addText(weatherData + ". Please generate two " +
-                        "context-specific questions based on the given weather data that users " +
-                        "might ask to help them make decisions about their day. " +
-                        "Your response must contain exactly two lines, each is one question, separated by exactly one \\n")
+                .addText("Given the current weather in " + cityName + ": " + weatherData +
+                        ". Generate exactly three unique, context-specific questions that a person in " + cityName +
+                        " might ask to help make decisions about their day. Consider activities, clothing, transportation, and events. "
+                        +
+                        "Avoid generic questions and ensure the questions are varied and specific to the current weather conditions. "
+                        +
+                        "List each question on a new line without any numbering or additional text.")
                 .build();
 
         // Listenable future to represent asynchronous computation
@@ -107,51 +114,68 @@ public class WeatherInsightsActivity extends AppCompatActivity {
                         Log.e("WeatherInsightsActivity", "Error generating questions", t);
                         runOnUiThread(() -> {
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(WeatherInsightsActivity.this, "Failed to generate questions from Gemini service", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(WeatherInsightsActivity.this,
+                                    "Failed to generate questions from Gemini service", Toast.LENGTH_SHORT).show();
                         });
                     }
                 },
-                executor
-        );
+                executor);
     }
 
     /**
-     * Parses the response text from Gemini API and returns a list of generated questions.
-     * Assumption: response contains exactly two lines, each is one question
+     * Parses the response text from Gemini API and returns a list of generated
+     * questions.
+     * Assumption: response contains exactly three lines, each is one question.
+     * 
      * @param responseText A string containing generated questions.
      * @return A list of questions.
      */
     private List<String> parseQuestions(String responseText) {
         if (responseText == null || responseText.isEmpty()) {
             Toast.makeText(WeatherInsightsActivity.this, "Response is successful but empty", Toast.LENGTH_SHORT).show();
+            return new ArrayList<>();
         }
-        // Parse response line by line
+
         List<String> questions = new ArrayList<>();
-        String[] lines = responseText.split("\n");
+        String[] lines = responseText.split("\\r?\\n");
         for (String line : lines) {
-            questions.add(line.trim());
+            String question = line.trim();
+            if (!question.isEmpty()) {
+                questions.add(question);
+            }
         }
         return questions;
     }
 
     /**
-     * Dynamically creates buttons for each question and adds them to the questionContainer layout.
-     * Each button will trigger another call to LLM service to answer the corresponding question.
+     * Dynamically creates buttons for each question and adds them to the
+     * questionContainer layout.
+     * Each button will trigger another call to LLM service to answer the
+     * corresponding question.
      *
-     * @param questions A list of context-specific questions generated from weather data.
+     * @param questions A list of context-specific questions generated from weather
+     *                  data.
      */
     private void displayQuestions(List<String> questions) {
         questionContainer.removeAllViews();
+
         for (String question : questions) {
             Button questionButton = new Button(this);
             questionButton.setText(question);
-            questionButton.setOnClickListener(view -> generateAnswerForQuestion(question));
+            // Set up the button's layout parameters and click listener
+            questionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    generateAnswerForQuestion(question);
+                }
+            });
             questionContainer.addView(questionButton);
         }
     }
 
     /**
-     * Calls the Gemini API to generate an answer to the user's selected question based on the weather data.
+     * Calls the Gemini API to generate an answer to the user's selected question
+     * based on the weather data.
      *
      * @param question The user's selected question.
      */
@@ -188,11 +212,11 @@ public class WeatherInsightsActivity extends AppCompatActivity {
                         Log.e("WeatherInsightsActivity", "Error generating answer", t);
                         runOnUiThread(() -> {
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(WeatherInsightsActivity.this, "Failed to get answer from Gemini service", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(WeatherInsightsActivity.this, "Failed to get answer from Gemini service",
+                                    Toast.LENGTH_SHORT).show();
                         });
                     }
                 },
-                executor
-        );
+                executor);
     }
 }

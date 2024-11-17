@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // Map Button
                 Button mapButton = new Button(new ContextThemeWrapper(this, R.style.Theme_MyFirstApp));
-                mapButton.setText("Show Map");
+                mapButton.setText("Map");
                 mapButton.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 int mapButtonId = View.generateViewId();

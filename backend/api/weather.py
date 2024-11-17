@@ -32,6 +32,8 @@ def get_weather():
     # Get latitude and longitude from request parameters
     latitude = request.args.get('lat')
     longitude = request.args.get('lon')
+
+    # API key for OpenWeatherMap, replace with your own key (We did not upload it to .env just for your convenience)
     api_key = 'c4901b8ee0c15b38415e52209061d2ca'
     if not latitude or not longitude:
         return jsonify({"error": "Latitude and longitude are required"}), 400
