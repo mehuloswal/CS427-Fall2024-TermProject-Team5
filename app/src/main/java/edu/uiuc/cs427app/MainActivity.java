@@ -57,14 +57,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Switch themeSwitch;
 
     /**
-     * States initialization in the MainActivity
+     * Initializes the main activity, including authentication, theme settings, and
+     * UI setup.
      *
      * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle
-     *                           contains the data it most
-     *                           recently supplied in {@link #onSaveInstanceState}.
-     *                           <b><i>Note: Otherwise it is null.</i></b>
-     *
+     *                           previously being shut down,
+     *                           this Bundle contains the data it most recently
+     *                           supplied in {@link #onSaveInstanceState}.
+     *                           Otherwise, it is null.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +87,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
+
             /**
-             * Logs user out and redirects user to Login page
+             * Logs out the user and redirects them to the login page.
              *
              * @param view The view that was clicked.
              */
@@ -112,7 +113,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 SharedPreferences.Editor editor = getSharedPreferences("settings", MODE_PRIVATE).edit();
                 editor.putBoolean("night_mode", isChecked);
                 editor.apply();
-                AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+                AppCompatDelegate.setDefaultNightMode(
+                        isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
             }
         });
 
@@ -128,11 +130,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonNew.setOnClickListener(this);
     }
 
-    /*
-      Handles click events on the buttons in the main activity. Depending on the button clicked,
-     it navigates to different activities to perform specific actions like adding a location,
-     showing added cities, or displaying a map.
-     @param view The view that was clicked.
+    /**
+     * Handles click events on buttons in the main activity.
+     * Navigates to different activities for adding locations, showing city details,
+     * or displaying maps.
+     *
+     * @param view The view that was clicked.
      */
     @Override
     public void onClick(View view) {
@@ -164,9 +167,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Fetch the list of cities from the backend server via RESTful APIs
+     * Fetches the list of cities from the backend server using a REST API.
      *
-     * @param userEmail The logged in user's email
+     * @param userEmail The email address of the logged-in user.
      */
     private void loadCitiesFromServer(String userEmail) {
         new Thread(() -> {
@@ -206,10 +209,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Dynamically and programmatically updates the list of cities in the
      * MainActivity layout
-     * This function parses jsonCityList (as an array of city names) to extract city details, creates corresponding UI elements,
+     * This function parses jsonCityList (as an array of city names) to extract city
+     * details, creates corresponding UI elements,
      * and sets up buttons for additional interactions (details and maps).
      * 
-     * @param jsonCityList The list of cities in Json string format, expected to contain city names,
+     * @param jsonCityList The list of cities in Json string format, expected to
+     *                     contain city names,
      *                     latitudes, and longitudes
      */
     private void updateCityList(String jsonCityList) {
@@ -272,8 +277,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Helper class to store city data including the name and geographical coordinates.
-     * This class encapsulates the properties of a city required for the application's functionality,
+     * Helper class to store city data including the name and geographical
+     * coordinates.
+     * This class encapsulates the properties of a city required for the
+     * application's functionality,
      * such as displaying details in various UI components or calculating distances.
      */
     private class CityData {
@@ -284,8 +291,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /**
          * Constructs a new CityData object.
          *
-         * @param cityName The name of the city.
-         * @param latitude The latitude coordinate of the city.
+         * @param cityName  The name of the city.
+         * @param latitude  The latitude coordinate of the city.
          * @param longitude The longitude coordinate of the city.
          */
         CityData(String cityName, double latitude, double longitude) {

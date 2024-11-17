@@ -1,8 +1,34 @@
 import requests
 from flask import Blueprint, request, jsonify
+
 weather_bp = Blueprint('weather', __name__)
+
 @weather_bp.route('/getWeather', methods=['GET'])
 def get_weather():
+    """
+    Retrieves weather data based on latitude and longitude.
+
+    Expects query parameters:
+        - lat (float): Latitude of the location
+        - lon (float): Longitude of the location
+    
+    Returns:
+        tuple: A tuple containing:
+            - JSON response with weather details
+            - HTTP status code 200 (OK) if successful
+            - HTTP status code 400 (Bad Request) if missing parameters
+            - HTTP status code 500 (Internal Server Error) if failed to fetch data
+    
+    Example response:
+        {
+            "city": "London",
+            "temperature": 15.0,
+            "weather": "Cloudy",
+            "humidity": 75,
+            "wind_speed": 5.0,
+            "datetime": 1632270000
+        }
+    """
     # Get latitude and longitude from request parameters
     latitude = request.args.get('lat')
     longitude = request.args.get('lon')

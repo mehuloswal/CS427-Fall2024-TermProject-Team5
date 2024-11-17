@@ -6,6 +6,4 @@
     <string name="password">Password</string>
     <string name="click_to_login">Click to login</string>
     <string name="click_to_register">Click to Register</string>
-    <string name="google_maps_key" translatable="false">AIzaSyBhYxnwgfG639ykyXEp9ew3CYvfb6t2CMs</string>
-    <string name="gemini_key" translatable="false">AIzaSyBvbrRmmkRCaS8mC-QdeOpj6hU7iSGO07E</string>
 </resources>

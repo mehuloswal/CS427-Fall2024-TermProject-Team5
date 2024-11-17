@@ -10,7 +10,8 @@ import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 
 /**
- * Activity to display a map centered on a city with coordinates provided via an intent.
+ * Activity to display a map centered on a city with coordinates provided via an
+ * intent.
  */
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -24,9 +25,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     /**
      * Sets up the activity, retrieves intent data, and initializes map view.
      *
-     * @param savedInstanceState if the activity is being re-initialized after previously being
-     * shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
-     * Otherwise it is null.
+     * @param savedInstanceState if the activity is being re-initialized after
+     *                           previously being
+     *                           shut down then this Bundle contains the data it
+     *                           most recently supplied in
+     *                           onSaveInstanceState(Bundle).
+     *                           Otherwise it is null.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     /**
-     * Configures the map with a marker at the city's coordinates when the map is ready.
+     * Configures the map with a marker at the city's coordinates when the map is
+     * ready.
      * 
      * @param googleMap the GoogleMap to be manipulated.
      */
@@ -76,7 +81,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cityLocation, 12));
     }
 
-    // Manages the map view's lifecycle with the activity's lifecycle.
+    /*
+     * The following methods are necessary to handle the lifecycle of the map view.
+     * They are required to ensure that the map view behaves correctly when the
+     * activity is paused,
+     * resumed, stopped, or destroyed.
+     * 
+     * For more information, see:
+     * https://developers.google.com/maps/documentation/android-sdk/map#lifecycle
+     */
     @Override
     protected void onStart() {
         super.onStart();

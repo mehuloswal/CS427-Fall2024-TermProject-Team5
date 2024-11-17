@@ -9,6 +9,8 @@ if (localPropertiesFile.exists()) {
     localProperties.load(new FileInputStream(localPropertiesFile))
 }
 
+def mapsApiKey = localProperties.getProperty('MAPS_API_KEY')
+
 android {
 //    compileSdk 32
     compileSdk 34
@@ -23,6 +25,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "GEMINI_KEY", "\"${localProperties.getProperty('GEMINI_KEY')}\""
+        buildConfigField "String", "MAPS_API_KEY", "\"${mapsApiKey}\""
+        manifestPlaceholders = [ MAPS_API_KEY: mapsApiKey ]
     }
 
     buildTypes {
