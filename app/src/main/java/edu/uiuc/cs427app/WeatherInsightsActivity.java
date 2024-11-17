@@ -79,7 +79,7 @@ public class WeatherInsightsActivity extends AppCompatActivity {
                 .addText(weatherData + ". Please generate two " +
                         "context-specific questions based on the given weather data that users " +
                         "might ask to help them make decisions about their day. " +
-                        "Your response must contain exactly two lines, each is one question")
+                        "Your response must contain exactly two lines, each is one question, separated by exactly one \\n")
                 .build();
 
         // Listenable future to represent asynchronous computation
