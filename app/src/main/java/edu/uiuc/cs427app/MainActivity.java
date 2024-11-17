@@ -128,10 +128,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonNew.setOnClickListener(this);
     }
 
-    /**
-     * The logistic control for the Details button for each added city on the layout
-     *
-     * @param view The view that was clicked.
+    /*
+      Handles click events on the buttons in the main activity. Depending on the button clicked,
+     it navigates to different activities to perform specific actions like adding a location,
+     showing added cities, or displaying a map.
+     @param view The view that was clicked.
      */
     @Override
     public void onClick(View view) {
@@ -205,13 +206,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Dynamically and programmatically updates the list of cities in the
      * MainActivity layout
-     * This function parses jsonCityList (as an array of city names)
-     *
-     * @param jsonCityList The list of cities in Json string format
+     * This function parses jsonCityList (as an array of city names) to extract city details, creates corresponding UI elements,
+     * and sets up buttons for additional interactions (details and maps).
+     * 
+     * @param jsonCityList The list of cities in Json string format, expected to contain city names,
+     *                     latitudes, and longitudes
      */
     private void updateCityList(String jsonCityList) {
         try {
             cityListContainer.removeAllViews();
+            // Clears all existing mappings from both the city and map button maps.
             cityButtonMap.clear();
             mapButtonMap.clear();
             weatherButtonMap.clear();
@@ -267,12 +271,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    // Helper class to store city data
+    /**
+     * Helper class to store city data including the name and geographical coordinates.
+     * This class encapsulates the properties of a city required for the application's functionality,
+     * such as displaying details in various UI components or calculating distances.
+     */
     private class CityData {
         String cityName;
         double latitude;
         double longitude;
 
+        /**
+         * Constructs a new CityData object.
+         *
+         * @param cityName The name of the city.
+         * @param latitude The latitude coordinate of the city.
+         * @param longitude The longitude coordinate of the city.
+         */
         CityData(String cityName, double latitude, double longitude) {
             this.cityName = cityName;
             this.latitude = latitude;
