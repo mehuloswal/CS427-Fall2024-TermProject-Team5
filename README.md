@@ -143,13 +143,13 @@ Meeting notes:
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
-| mehuljo2 | | |
-| pranav31 | | |
-| wenqi6 | | |
-| rajan11 | | |
-| zexinl2 | | |
-| ac163 | | |
-| ruipeng2 | | |
+| mehuljo2 | Completed Milestone 4. Completed implementing Map Feature, Added missing docstrings, Recorded the video, Enhanced the LLM prompts for better questions, Added secondary features such as Scrollable views etc. | Read about Milestone 5 for the next week. |
+| pranav31 | Helped with writing the backend function. Particpated in meetings | Read about Milestone 5 for the next week. |
+| wenqi6 | Helped working with Zexin on displaying Weather for each city and writing APIs for the same. | Read about Milestone 5 for the next week. |
+| rajan11 | Helped designing and documenting the Map feature functions. | Read about Milestone 5 for the next week. |
+| zexinl2 | Helped working with Wenqi on displaying Weather for each city and writing APIs for the same. | Read about Milestone 5 for the next week. |
+| ac163 | Helped Ruipeng with the LLM Insights feature for weather. | Read about Milestone 5 for the next week. |
+| ruipeng2 | Fixed Theme issue, helped in configuring the MAP SDK API Key, worked on the LLM Insights feature with parsing and rendering logic as a seperate activity. Managed team and helped them with technical difficulties. | Read about Milestone 5 for the next week. |
 | | | |
 </br>
 
