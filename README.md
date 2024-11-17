@@ -139,7 +139,7 @@ Meeting notes: Discussed the tasks and got insights from teammates on the design
 </br>
 Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6, rajan11, ac163
 </br>
-Meeting notes: 
+Meeting notes: Synced and every member exchanged their ideas and updates. Assigned tasks them till the deadline for Milestone 4. 
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
