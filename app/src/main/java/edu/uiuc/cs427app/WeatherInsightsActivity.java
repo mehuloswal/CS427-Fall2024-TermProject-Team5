@@ -37,6 +37,15 @@ public class WeatherInsightsActivity extends AppCompatActivity {
     private TextView responseTitle;
     private GenerativeModelFutures model;
 
+    /**
+     * Initializes the activity, sets up UI elements, and fetches weather data
+     * passed from DetailsActivity.
+     *
+     * @param savedInstanceState if the activity is being re-initialized after
+     *                           previously being shut down then this Bundle
+     *                           contains the data it most recently supplied in
+     *                           onSaveInstanceState(Bundle). Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

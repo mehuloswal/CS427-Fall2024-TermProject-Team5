@@ -41,10 +41,13 @@ public class DetailsActivity extends AppCompatActivity {
     private double windSpeed;
 
     /**
-     * Initializes the DetailsActivity, setting up UI elements to display city information,
-     * and fetches the city name from the intent and current Firebase user information.
+     * Initializes the DetailsActivity, setting up UI elements to display city
+     * information,
+     * and fetches the city name from the intent and current Firebase user
+     * information.
      *
-     * @param savedInstanceState Bundle object containing the activity's previously saved state.
+     * @param savedInstanceState Bundle object containing the activity's previously
+     *                           saved state.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,23 +84,28 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(DetailsActivity.this, WeatherInsightsActivity.class);
                 intent.putExtra("city", cityName);
-                intent.putExtra("weatherData", composeWeatherDataString(weatherDescription, temperature, humidity, windSpeed));
+                intent.putExtra("weatherData",
+                        composeWeatherDataString(weatherDescription, temperature, humidity, windSpeed));
                 startActivity(intent);
             }
         });
     }
 
     /**
-     * Composes a string containing weather information based on the provided details.
+     * Composes a string containing weather information based on the provided
+     * details.
      *
-     * @param weatherDescription A description of the weather (e.g., "sunny", "cloudy").
+     * @param weatherDescription A description of the weather (e.g., "sunny",
+     *                           "cloudy").
      * @param temperature        The temperature in degrees Celsius.
      * @param humidity           The humidity level as a percentage.
      * @param windSpeed          The wind speed in meters per second.
      * @return A formatted string containing the weather information.
      */
-    private String composeWeatherDataString(String weatherDescription, double temperature, int humidity, double windSpeed) {
-        return String.format("Today's weather is %s with a temperature of %.1f°C, humidity at %d%%, and wind speed of %.1f m/s.",
+    private String composeWeatherDataString(String weatherDescription, double temperature, int humidity,
+            double windSpeed) {
+        return String.format(
+                "Today's weather is %s with a temperature of %.1f°C, humidity at %d%%, and wind speed of %.1f m/s.",
                 weatherDescription, temperature, humidity, windSpeed);
     }
 
@@ -206,7 +214,27 @@ public class DetailsActivity extends AppCompatActivity {
             Toast.makeText(this, "User or city data missing.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    /*
+     * AsyncTask to fetch weather data from the backend server.
+     * The task:
+     * 
+     * 1. Fetches weather data from the server
+     * 2. Parses the JSON response
+     * 3. Updates the UI with the weather data
+     * 4. Shows a toast message if the task fails
+     * 
+     * The task uses the latitude and longitude of the city to fetch weather data.
+     * The weather data includes the weather description, temperature, humidity, and
+     * wind speed.
+     */
     private class FetchWeatherTask extends AsyncTask<Void, Void, JSONObject> {
+        /**
+         * Fetches weather data from the server in the background.
+         *
+         * @param voids No parameters are used.
+         * @return A JSONObject containing the weather data, or null if an error occurs.
+         */
         @Override
         protected JSONObject doInBackground(Void... voids) {
             try {
@@ -230,6 +258,13 @@ public class DetailsActivity extends AppCompatActivity {
             }
             return null;
         }
+
+        /**
+         * Updates the UI with the weather data fetched from the server.
+         * Shows a toast message if the task fails.
+         *
+         * @param weatherData The JSON object containing weather data.
+         */
         @Override
         protected void onPostExecute(JSONObject weatherData) {
             if (weatherData != null) {

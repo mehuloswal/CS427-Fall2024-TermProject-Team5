@@ -81,14 +81,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cityLocation, 12));
     }
 
-    /*
-     * The following methods are necessary to handle the lifecycle of the map view.
-     * They are required to ensure that the map view behaves correctly when the
-     * activity is paused,
-     * resumed, stopped, or destroyed.
-     * 
-     * For more information, see:
-     * https://developers.google.com/maps/documentation/android-sdk/map#lifecycle
+    /**
+     * Called when the activity is becoming visible to the user.
+     * This is generally tied to onResume() of the containing Activity's lifecycle.
      */
     @Override
     protected void onStart() {
@@ -96,30 +91,50 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapView.onStart();
     }
 
+    /**
+     * Called when the activity will start interacting with the user.
+     * This is generally tied to onResume() of the containing Activity's lifecycle.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         mapView.onResume();
     }
 
+    /**
+     * Called when the system is about to start resuming a previous activity.
+     * This is generally tied to onPause() of the containing Activity's lifecycle.
+     */
     @Override
     protected void onPause() {
         mapView.onPause();
         super.onPause();
     }
 
+    /**
+     * Called when the activity is no longer visible to the user.
+     * This is generally tied to onStop() of the containing Activity's lifecycle.
+     */
     @Override
     protected void onStop() {
         mapView.onStop();
         super.onStop();
     }
 
+    /**
+     * Perform any final cleanup before an activity is destroyed.
+     * This is generally tied to onDestroy() of the containing Activity's lifecycle.
+     */
     @Override
     protected void onDestroy() {
         mapView.onDestroy();
         super.onDestroy();
     }
 
+    /**
+     * This is called when the overall system is running low on memory, and actively
+     * running processes should trim their memory usage.
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();

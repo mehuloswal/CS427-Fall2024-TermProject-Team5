@@ -8,7 +8,7 @@ def get_weather():
     """
     Retrieves weather data based on latitude and longitude.
 
-    Expects query parameters:
+    Args:
         - lat (float): Latitude of the location
         - lon (float): Longitude of the location
     
@@ -38,7 +38,6 @@ def get_weather():
     if not latitude or not longitude:
         return jsonify({"error": "Latitude and longitude are required"}), 400
     # Construct the URL with latitude and longitude
-    # url = f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={c4901b8ee0c15b38415e52209061d2ca}&units=metric"
     url = f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key}&units=metric"
     response = requests.get(url)
     if response.status_code == 200:
