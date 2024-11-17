@@ -203,7 +203,7 @@ public class WeatherInsightsActivity extends AppCompatActivity {
                             // Hides the progress bar and show the title
                             progressBar.setVisibility(View.GONE);
                             responseTitle.setVisibility(View.VISIBLE);
-                            responseText.setText(answer);
+                            responseText.setText("Q: " + question + "\n\nA: " + answer);
                         });
                     }
 
