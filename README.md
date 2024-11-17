@@ -4,7 +4,7 @@ The code for CS427 Android app.
 <br/>
 <br/>
 
-<b>Team # member information</b>
+<b>Team 5 member information</b>
 <br/>
 | Name | NetID | GitHub ID | Role | Experience |
 | ------------- | ------------- | ------------| ------------- | ----------------------------------|
@@ -119,37 +119,37 @@ Meeting notes: Discussed Potential bugs and ways to fix it. Figuring out final a
 
 <b>Week 6</b>
 </br>
-Members present: List the NetID of the people who attended the meeting
+Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6, rajan11, ac163
 </br>
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: Discussed the tasks and got insights from teammates on the design for the next milestone. Decided to use Google Maps SDK and render it. Assigned tasks in groups to work on the deliverables asynchronously
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
+| mehuljo2 | Completed all the previous week's tasks for previous milestone. Read the documentation for Maps SDK and about the implementation for the same. | Implement the entire Map SDK. Merge all branches, review all PRs and keep the video ready for milestone 4.  |
+| pranav31 | Completed all the previous week's tasks for previous milestone. Helped in finalzing the documentation for the previous Milestone | Got assigned for a task to work on LLMs and MainActivity Screens with minor changes. |
+| wenqi6 |  Completed all the previous week's tasks for previous milestone. Helped in maintaining theme consistency for the application. | Got assigned for a task to display Weather information  |
+| rajan11 |  Completed all the previous week's tasks for previous milestone.  |  Got assigned for a task to display Map and fix documentation for the same |
+| zexinl2 |  Completed all the previous week's tasks for previous milestone. Helped in maintaing theme and wrapping the APIs for the previous milestone. | Got assigned for a task to display Weather information.  |
+| ac163 |  Completed all the previous week's tasks for previous milestone. | Got assigned for a task to display Weather Insights using LLM. |
+| ruipeng2 |  Completed all the previous week's tasks for previous milestone. Researched about major bug in the theme changing after fetching from the theme preferences from the table. | Got assigned for a task to display Weather Insights using LLMs. Set up GCP for Maps SDK and Gemini. |
 | | | |
 </br>
 
 <b>Week 7</b>
 </br>
-Members present: List the NetID of the people who attended the meeting
+Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6, rajan11, ac163
 </br>
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: 
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
+| mehuljo2 | | |
+| pranav31 | | |
+| wenqi6 | | |
+| rajan11 | | |
+| zexinl2 | | |
+| ac163 | | |
+| ruipeng2 | | |
 | | | |
 </br>
 

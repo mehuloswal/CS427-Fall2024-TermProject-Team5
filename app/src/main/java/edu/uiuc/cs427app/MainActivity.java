@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private HashMap<Integer, CityData> mapButtonMap;
 
+    private HashMap<Integer, CityData> weatherButtonMap;
+
     FirebaseAuth auth;
     FirebaseUser user;
     Button logoutBtn;
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * States initialization in the MainActivity
-     * 
+     *
      * @param savedInstanceState If the activity is being re-initialized after
      *                           previously being shut down then this Bundle
      *                           contains the data it most
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         auth = FirebaseAuth.getInstance();
         logoutBtn = findViewById(R.id.logout_btn);
-        // themeSwitch = findViewById(R.id.themeSwitch);
+        themeSwitch = findViewById(R.id.themeSwitch);
 
         user = auth.getCurrentUser();
         if (user == null) {
@@ -79,8 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             finish();
         } else {
-            // fetch user preference
-            applyThemeFromPreferences();
             loadCitiesFromServer(user.getEmail());
             String teamNumber = getString(R.string.app_name);
             getSupportActionBar().setTitle(teamNumber + " - " + user.getEmail().split("@")[0]);
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             /**
              * Logs user out and redirects user to Login page
-             * 
+             *
              * @param view The view that was clicked.
              */
             @Override
@@ -101,9 +101,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        // Fetch user preference and set up the theme switch feature
+        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
+        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
+        themeSwitch.setChecked(isNightMode);
+
+        themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (buttonView.isPressed()) {
+                // Switches theme
+                SharedPreferences.Editor editor = getSharedPreferences("settings", MODE_PRIVATE).edit();
+                editor.putBoolean("night_mode", isChecked);
+                editor.apply();
+                AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
+
         // Initializing the UI components
         cityButtonMap = new HashMap<>();
         mapButtonMap = new HashMap<>();
+        weatherButtonMap = new HashMap<>();
+
         // Find the container for the city list
         cityListContainer = findViewById(R.id.cityListContainer);
 
@@ -111,12 +128,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonNew.setOnClickListener(this);
     }
 
-    /**
-     * Handles click events on the buttons in the main activity. Depending on the button clicked,
-     * it navigates to different activities to perform specific actions like adding a location,
-     * showing added cities, or displaying a map.
-     * 
-     * @param view The view that was clicked.
+    /*
+      Handles click events on the buttons in the main activity. Depending on the button clicked,
+     it navigates to different activities to perform specific actions like adding a location,
+     showing added cities, or displaying a map.
+     @param view The view that was clicked.
      */
     @Override
     public void onClick(View view) {
@@ -127,8 +143,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         } else if (cityButtonMap.containsKey(id)) {
             // Details button clicked
+            CityData cityData = weatherButtonMap.get(id);
             intent = new Intent(this, DetailsActivity.class);
             intent.putExtra("city", cityButtonMap.get(id));
+            intent.putExtra("cityName", cityData.cityName);
+            intent.putExtra("latitude", cityData.latitude);
+            intent.putExtra("longitude", cityData.longitude);
             startActivity(intent);
         } else if (mapButtonMap.containsKey(id)) {
             // Map button clicked
@@ -145,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * Fetch the list of cities from the backend server via RESTful APIs
-     * 
+     *
      * @param userEmail The logged in user's email
      */
     private void loadCitiesFromServer(String userEmail) {
@@ -190,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * and sets up buttons for additional interactions (details and maps).
      * 
      * @param jsonCityList The list of cities in Json string format, expected to contain city names,
-     *                     latitudes, and longitudes.
+     *                     latitudes, and longitudes
      */
     private void updateCityList(String jsonCityList) {
         try {
@@ -198,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Clears all existing mappings from both the city and map button maps.
             cityButtonMap.clear();
             mapButtonMap.clear();
+            weatherButtonMap.clear();
 
             JSONArray cityArray = new JSONArray(jsonCityList);
             for (int i = 0; i < cityArray.length(); i++) {
@@ -218,12 +239,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // Details Button
                 Button detailsButton = new Button(new ContextThemeWrapper(this, R.style.Theme_MyFirstApp));
-                detailsButton.setText("Show Details");
+                detailsButton.setText("Weather");
                 detailsButton.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 int detailsButtonId = View.generateViewId();
                 detailsButton.setId(detailsButtonId);
                 cityButtonMap.put(detailsButtonId, cityName);
+                CityData cityData = new CityData(cityName, latitude, longitude);
+                weatherButtonMap.put(detailsButtonId, cityData);
                 detailsButton.setOnClickListener(this);
 
                 // Map Button
@@ -233,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 int mapButtonId = View.generateViewId();
                 mapButton.setId(mapButtonId);
-                CityData cityData = new CityData(cityName, latitude, longitude);
+                cityData = new CityData(cityName, latitude, longitude);
                 mapButtonMap.put(mapButtonId, cityData);
                 mapButton.setOnClickListener(this);
 
@@ -270,20 +293,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.latitude = latitude;
             this.longitude = longitude;
         }
-    }
-
-    /**
-     * Applies the theme mode based on the saved user preference.
-     * Retrieves the theme mode preference from SharedPreferences,
-     * and sets the app's night mode accordingly.
-     * If "night_mode" is set to true in SharedPreferences, the app
-     * will switch to dark mode. Otherwise, it will remain in light mode.
-     */
-    private void applyThemeFromPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
-        boolean isNightMode = sharedPreferences.getBoolean("night_mode", false);
-        AppCompatDelegate
-                .setDefaultNightMode(isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
     }
 
 }

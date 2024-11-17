@@ -2,9 +2,11 @@ package edu.uiuc.cs427app;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +20,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -26,6 +31,14 @@ public class DetailsActivity extends AppCompatActivity {
 
     private String cityName;
     private FirebaseUser user;
+    private double latitude;
+    private double longitude;
+    private TextView temperatureView, weatherView, humidityView, windView;
+
+    private String weatherDescription;
+    private double temperature;
+    private int humidity;
+    private double windSpeed;
 
     /**
      * Initializes the DetailsActivity, setting up UI elements to display city information,
@@ -42,14 +55,50 @@ public class DetailsActivity extends AppCompatActivity {
         cityName = getIntent().getStringExtra("city");
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Setting up UI elements
+        // Retrieve data from Intent
+        latitude = getIntent().getDoubleExtra("latitude", 0);
+        longitude = getIntent().getDoubleExtra("longitude", 0);
+
+        // Initialize UI elements
         TextView welcomeMessage = findViewById(R.id.welcomeText);
         TextView cityInfoMessage = findViewById(R.id.cityInfo);
-        Button buttonMap = findViewById(R.id.mapButton);
+        temperatureView = findViewById(R.id.temperature);
+        weatherView = findViewById(R.id.weather);
+        humidityView = findViewById(R.id.humidity);
+        windView = findViewById(R.id.wind);
 
         // Display city information
-        welcomeMessage.setText("Welcome to the " + cityName);
+        welcomeMessage.setText("Welcome to " + cityName + "!");
         cityInfoMessage.setText("Detailed information about the weather of " + cityName);
+
+        // Load weather details
+        new FetchWeatherTask().execute();
+
+        // Set up the "Weather Insights" button
+        Button weatherInsightsButton = findViewById(R.id.weatherInsightsButton);
+        weatherInsightsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailsActivity.this, WeatherInsightsActivity.class);
+                intent.putExtra("city", cityName);
+                intent.putExtra("weatherData", composeWeatherDataString(weatherDescription, temperature, humidity, windSpeed));
+                startActivity(intent);
+            }
+        });
+    }
+
+    /**
+     * Composes a string containing weather information based on the provided details.
+     *
+     * @param weatherDescription A description of the weather (e.g., "sunny", "cloudy").
+     * @param temperature        The temperature in degrees Celsius.
+     * @param humidity           The humidity level as a percentage.
+     * @param windSpeed          The wind speed in meters per second.
+     * @return A formatted string containing the weather information.
+     */
+    private String composeWeatherDataString(String weatherDescription, double temperature, int humidity, double windSpeed) {
+        return String.format("Today's weather is %s with a temperature of %.1f°C, humidity at %d%%, and wind speed of %.1f m/s.",
+                weatherDescription, temperature, humidity, windSpeed);
     }
 
     /**
@@ -155,6 +204,52 @@ public class DetailsActivity extends AppCompatActivity {
             }).start();
         } else {
             Toast.makeText(this, "User or city data missing.", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private class FetchWeatherTask extends AsyncTask<Void, Void, JSONObject> {
+        @Override
+        protected JSONObject doInBackground(Void... voids) {
+            try {
+                String urlString = Config.API_URL + "getWeather?lat=" + latitude + "&lon=" + longitude;
+                URL url = new URL(urlString);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        response.append(line);
+                    }
+                    in.close();
+                    return new JSONObject(response.toString());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(JSONObject weatherData) {
+            if (weatherData != null) {
+                try {
+                    // Extract and display weather data
+                    weatherDescription = weatherData.getString("weather");
+                    temperature = weatherData.getDouble("temperature");
+                    humidity = weatherData.getInt("humidity");
+                    windSpeed = weatherData.getDouble("wind_speed");
+                    // Update UI
+                    weatherView.setText("Weather: " + weatherDescription);
+                    temperatureView.setText("Temperature: " + temperature + "°C");
+                    humidityView.setText("Humidity: " + humidity + "%");
+                    windView.setText("Wind Speed: " + windSpeed + " m/s");
+                } catch (Exception e) {
+                    Toast.makeText(DetailsActivity.this, "Error parsing weather data.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(DetailsActivity.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
