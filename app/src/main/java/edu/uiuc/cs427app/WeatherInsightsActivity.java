@@ -106,6 +106,12 @@ public class WeatherInsightsActivity extends AppCompatActivity {
         Futures.addCallback(
                 response,
                 new FutureCallback<GenerateContentResponse>() {
+                    /**
+                     * Called when the Gemini API request completes successfully.
+                     * Parses the response to extract generated questions and updates the UI to display them.
+                     *
+                     * @param result The result of the API call, containing the generated content.
+                     */
                     @Override
                     public void onSuccess(GenerateContentResponse result) {
                         // Parse response (the generated questions)
@@ -118,6 +124,12 @@ public class WeatherInsightsActivity extends AppCompatActivity {
                         });
                     }
 
+                    /**
+                     * Called when the Gemini API request fails.
+                     * Logs the error and updates the UI to notify the user of the failure.
+                     *
+                     * @param t The exception thrown during the API call.
+                     */
                     @Override
                     public void onFailure(Throwable t) {
                         Log.e("WeatherInsightsActivity", "Error generating questions", t);
@@ -173,6 +185,12 @@ public class WeatherInsightsActivity extends AppCompatActivity {
             questionButton.setText(question);
             // Set up the button's layout parameters and click listener
             questionButton.setOnClickListener(new View.OnClickListener() {
+                /**
+                 * Called when the user clicks on a question button.
+                 * Triggers the generation of an answer for the selected question using the Gemini API.
+                 *
+                 * @param v The view that was clicked (the question button).
+                 */
                 @Override
                 public void onClick(View v) {
                     generateAnswerForQuestion(question);
@@ -205,6 +223,12 @@ public class WeatherInsightsActivity extends AppCompatActivity {
         Futures.addCallback(
                 response,
                 new FutureCallback<GenerateContentResponse>() {
+                    /**
+                     * Called when the Gemini API request completes successfully.
+                     * Parses the response to extract generated questions and updates the UI to display them.
+                     *
+                     * @param result The result of the API call, containing the generated content.
+                     */
                     @Override
                     public void onSuccess(GenerateContentResponse result) {
                         String answer = result.getText();
@@ -216,6 +240,12 @@ public class WeatherInsightsActivity extends AppCompatActivity {
                         });
                     }
 
+                    /**
+                     * Called when the Gemini API request fails.
+                     * Logs the error and updates the UI to notify the user of the failure.
+                     *
+                     * @param t The exception thrown during the API call.
+                     */
                     @Override
                     public void onFailure(Throwable t) {
                         Log.e("WeatherInsightsActivity", "Error generating answer", t);

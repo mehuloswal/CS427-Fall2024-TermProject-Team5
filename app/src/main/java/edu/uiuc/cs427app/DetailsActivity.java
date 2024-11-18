@@ -80,6 +80,13 @@ public class DetailsActivity extends AppCompatActivity {
         // Set up the "Weather Insights" button
         Button weatherInsightsButton = findViewById(R.id.weatherInsightsButton);
         weatherInsightsButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Called when the "Weather Insights" button is clicked.
+             * Creates an Intent to navigate to the WeatherInsightsActivity and passes
+             * the city name and formatted weather data to the new activity.
+             *
+             * @param v The view that was clicked (the "Weather Insights" button).
+             */
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailsActivity.this, WeatherInsightsActivity.class);
