@@ -54,4 +54,8 @@
         <activity android:name=".MapActivity" />
     </application>
 
+    <instrumentation
+        android:name="androidx.test.runner.AndroidJUnitRunner"
+        android:targetPackage="edu.uiuc.cs427app"
+        android:label="Tests for edu.uiuc.cs427app"/>
 </manifest>
