@@ -253,6 +253,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 CityData cityData = new CityData(cityName, latitude, longitude);
                 weatherButtonMap.put(detailsButtonId, cityData);
                 detailsButton.setOnClickListener(this);
+                detailsButton.setTag("weather_button_" + cityName);
+
 
                 // Map Button
                 Button mapButton = new Button(new ContextThemeWrapper(this, R.style.Theme_MyFirstApp));
