@@ -9,11 +9,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
-import static androidx.test.espresso.matcher.RootMatchers.isSystemAlertWindow;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 
 import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -30,7 +32,7 @@ import org.hamcrest.Matchers;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class LoginRegisterTest {
+public class UserLoginTest {
 
     @Rule
     public ActivityScenarioRule<Login> mActivityRule = new ActivityScenarioRule<>(Login.class);
@@ -175,5 +177,41 @@ public class LoginRegisterTest {
                 .check(matches(isDisplayed()));
         onView(withId(R.id.btn_register))
                 .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testAllElementsDisplayed() {
+        // Check input fields
+        onView(withId(R.id.username))
+                .check(matches(isDisplayed()));
+        onView(withHint("Username"))  // Using hint text from strings.xml
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.password))
+                .check(matches(isDisplayed()));
+        onView(withHint("Password"))  // Using hint text from strings.xml
+                .check(matches(isDisplayed()));
+
+        // Check progress bar exists (though it should be hidden initially)
+        onView(withId(R.id.progressBar))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        // Check login button
+        onView(withId(R.id.btn_login))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.btn_login))
+                .check(matches(withText("Login")));
+
+        // Check register link text
+        onView(withId(R.id.registerNow))
+                .check(matches(isDisplayed()));
+        onView(withText("Click to Register"))  // Using text from strings.xml
+                .check(matches(isDisplayed()));
+
+        // Check theme switch
+        onView(withId(R.id.themeSwitch))
+                .check(matches(isDisplayed()));
+//        onView(withText("Dark Mode"))
+//                .check(matches(isDisplayed()));
     }
 }
