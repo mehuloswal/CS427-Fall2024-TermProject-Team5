@@ -5,14 +5,13 @@ import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
 
-import static org.hamcrest.Matchers.not;
-
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,10 +19,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Instrumented test to verify the deletion of a city location.
+ * Instrumented test to verify the map feature for "Boston".
  */
 @RunWith(AndroidJUnit4.class)
-public class DeleteLocationTest {
+public class LocationFeatureBostonTest {
 
     private FirebaseAuth mAuth;
 
@@ -37,23 +36,23 @@ public class DeleteLocationTest {
         if (mAuth.getCurrentUser() != null) {
             mAuth.signOut();
         }
-
         // Perform login
         performLogin();
-
-        // Ensure "Chicago" exists in the city list
-        ensureCityExists("Chicago");
+        // Ensure "Boston" is in the city list
+        ensureCityExists("Boston");
     }
 
+    /**
+     * Helper method to perform user login before testing.
+     * Performs actions and checks assertions related to login.
+     */
     private void performLogin() {
-        // Launch the login activity
+        // Launch login activity
         ActivityScenario.launch(Login.class);
 
-        // Enter username
+        // Enter username and password
         onView(withId(R.id.username))
                 .perform(typeText("ruipeng2"), closeSoftKeyboard());
-
-        // Enter password
         onView(withId(R.id.password))
                 .perform(typeText("123456"), closeSoftKeyboard());
 
@@ -61,22 +60,22 @@ public class DeleteLocationTest {
         onView(withId(R.id.btn_login))
                 .perform(click());
 
-        // Add a small delay to allow for the login process
+        // Wait for the login process
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1000); // Pause to allow login to complete
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        // Verify that we're on the main activity by checking if the "Add Location"
-        // button is displayed
+        // Verify main activity is displayed
         onView(withId(R.id.buttonAddLocation))
                 .check(matches(isDisplayed()));
     }
 
     /**
-     * Ensures that a city exists in the user's city list. If it does not exist,
-     * adds it.
+     * Ensures that a city is in the user's city list. If it already exists, does
+     * not add it again.
+     * Includes actions and assertions to verify city presence.
      *
      * @param cityName The name of the city to ensure exists.
      */
@@ -92,7 +91,8 @@ public class DeleteLocationTest {
     }
 
     /**
-     * Adds a city to the user's city list.
+     * Helper method to add a city to the user's city list.
+     * Includes actions and assertions for adding a city.
      *
      * @param cityName The name of the city to add.
      */
@@ -113,9 +113,9 @@ public class DeleteLocationTest {
         onView(withId(R.id.addCityButton))
                 .perform(click());
 
-        // Wait for the city to be added
+        // Pause to allow city to be added
         try {
-            Thread.sleep(2000); // Pause for city to be added
+            Thread.sleep(2000); // Wait for the city to be added
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -127,47 +127,40 @@ public class DeleteLocationTest {
 
     @After
     public void tearDown() {
-        // Clean up after each test
+        // Sign out after the test
         if (mAuth.getCurrentUser() != null) {
             mAuth.signOut();
         }
     }
 
+    /**
+     * Test the map feature for "Boston".
+     * Includes actions and assertions for testing the map functionality.
+     */
     @Test
-    public void testRemoveCity() {
-        // Verify "Chicago" is displayed in the city list
-        onView(withText("Chicago"))
+    public void testMapFeatureBoston() {
+        // Verify "Boston" is displayed
+        onView(withText("Boston"))
                 .check(matches(isDisplayed()));
 
-        // Navigate to the city details screen
-        onView(withText("Chicago"))
+        // Click the "MAP" button for "Boston"
+        String mapButtonTag = "map_button_Boston";
+        onView(withTagValue(Matchers.<Object>equalTo(mapButtonTag)))
                 .perform(click());
 
-        // Verify we're on the city details screen by checking for city info text
-        onView(withId(R.id.cityInfo))
-                .check(matches(isDisplayed()));
-
-        // Open the menu and click the delete option
-        onView(withContentDescription("More options")) // Opens the options menu
-                .perform(click());
-
-        onView(withText("Delete City")) // Matches the delete option in the menu
-                .perform(click());
-
-        // Confirm the deletion in the dialog
-        onView(withText("Yes"))
-                .perform(click());
-
-        // Wait for the deletion to process
+        // Wait for the map activity to load
         try {
-            Thread.sleep(2000); // Pause to allow deletion to complete
+            Thread.sleep(2000); // Pause to allow map to load
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        // Verify successful deletion by checking the city is no longer displayed
-        onView(withText("Chicago"))
-                .check(matches(not(isDisplayed())));
-    }
+        // Verify that the map activity is displayed by checking for city name
+        onView(withId(R.id.cityNameTextView))
+                .check(matches(withText("Boston")));
 
+        // Verify that the map view is displayed
+        onView(withId(R.id.mapView))
+                .check(matches(isDisplayed()));
+    }
 }
