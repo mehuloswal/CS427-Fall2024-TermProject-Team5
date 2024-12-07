@@ -4,6 +4,10 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
+import static androidx.test.espresso.matcher.ViewMatchers.*;
+import static org.hamcrest.Matchers.allOf;
+
+import static org.hamcrest.Matchers.equalTo;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -62,13 +66,14 @@ public class LocationFeatureBostonTest {
 
         // Wait for the login process
         try {
-            Thread.sleep(1000); // Pause to allow login to complete
+            Thread.sleep(2000); // Increased wait time
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        // Verify main activity is displayed
+        // Scroll to and verify main activity is displayed
         onView(withId(R.id.buttonAddLocation))
+                .perform(scrollTo())
                 .check(matches(isDisplayed()));
     }
 
@@ -83,6 +88,7 @@ public class LocationFeatureBostonTest {
         // Check if the city is already displayed
         try {
             onView(withText(cityName))
+                    .perform(scrollTo())
                     .check(matches(isDisplayed()));
         } catch (Exception e) {
             // City is not displayed, add it
@@ -99,10 +105,11 @@ public class LocationFeatureBostonTest {
     private void addCity(String cityName) {
         // Click "Add Location" button
         onView(withId(R.id.buttonAddLocation))
-                .perform(click());
+                .perform(scrollTo(), click());
 
         // Verify that we're on the AddLocation activity
         onView(withId(R.id.addCityButton))
+                .perform(scrollTo())
                 .check(matches(isDisplayed()));
 
         // Type the city name
@@ -122,6 +129,7 @@ public class LocationFeatureBostonTest {
 
         // Verify the city is displayed in the main activity
         onView(withText(cityName))
+                .perform(scrollTo())
                 .check(matches(isDisplayed()));
     }
 
@@ -141,12 +149,22 @@ public class LocationFeatureBostonTest {
     public void testMapFeatureBoston() {
         // Verify "Boston" is displayed
         onView(withText("Boston"))
+                .perform(scrollTo())
                 .check(matches(isDisplayed()));
 
-        // Click the "MAP" button for "Boston"
-        String mapButtonTag = "map_button_Boston";
-        onView(withTagValue(Matchers.<Object>equalTo(mapButtonTag)))
-                .perform(click());
+        // Locate the parent layout containing the city name and its buttons
+        onView(allOf(
+                hasDescendant(withText("Boston")),
+                isDescendantOfA(withId(R.id.cityListContainer))))
+                .check(matches(isDisplayed()));
+
+        // Click the "MAP" button within the same layout as "Boston"
+        onView(allOf(
+                withText("Map"), // Text of the "Map" button
+                isDescendantOfA(allOf(
+                        hasDescendant(withText("Boston")), // Ensure it's in the layout containing "Boston"
+                        isDescendantOfA(withId(R.id.cityListContainer))))))
+                .perform(scrollTo(), click());
 
         // Wait for the map activity to load
         try {
@@ -162,5 +180,10 @@ public class LocationFeatureBostonTest {
         // Verify that the map view is displayed
         onView(withId(R.id.mapView))
                 .check(matches(isDisplayed()));
+
+        // Dynamically verify the coordinates are displayed in the expected format
+        onView(withId(R.id.coordinatesTextView))
+                .check(matches(withText(Matchers.startsWith("Latitude: "))))
+                .check(matches(withText(Matchers.containsString("Longitude: "))));
     }
 }
