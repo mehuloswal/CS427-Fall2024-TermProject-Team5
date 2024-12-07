@@ -133,6 +133,9 @@ public class LocationFeatureChicagoTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Cleans up after each test by logging out the user if logged in.
+     */
     @After
     public void tearDown() {
         // Sign out after the test
