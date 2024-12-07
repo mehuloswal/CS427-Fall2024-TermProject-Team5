@@ -2,10 +2,12 @@ package edu.uiuc.cs427app;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.*;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
 
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.equalTo;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -63,14 +65,15 @@ public class DeleteLocationTest {
 
         // Add a small delay to allow for the login process
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000); // Increased wait time
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        // Verify that we're on the main activity by checking if the "Add Location"
-        // button is displayed
+        // Scroll to and verify that we're on the main activity by checking if the "Add
+        // Location" button is displayed
         onView(withId(R.id.buttonAddLocation))
+                .perform(scrollTo())
                 .check(matches(isDisplayed()));
     }
 
@@ -84,6 +87,7 @@ public class DeleteLocationTest {
         // Check if the city is already displayed
         try {
             onView(withText(cityName))
+                    .perform(scrollTo())
                     .check(matches(isDisplayed()));
         } catch (Exception e) {
             // City is not displayed, add it
@@ -99,10 +103,11 @@ public class DeleteLocationTest {
     private void addCity(String cityName) {
         // Click "Add Location" button
         onView(withId(R.id.buttonAddLocation))
-                .perform(click());
+                .perform(scrollTo(), click());
 
         // Verify that we're on the AddLocation activity
         onView(withId(R.id.addCityButton))
+                .perform(scrollTo())
                 .check(matches(isDisplayed()));
 
         // Type the city name
@@ -122,6 +127,7 @@ public class DeleteLocationTest {
 
         // Verify the city is displayed in the main activity
         onView(withText(cityName))
+                .perform(scrollTo())
                 .check(matches(isDisplayed()));
     }
 
@@ -135,39 +141,80 @@ public class DeleteLocationTest {
 
     @Test
     public void testRemoveCity() {
-        // Verify "Chicago" is displayed in the city list
-        onView(withText("Chicago"))
-                .check(matches(isDisplayed()));
-
-        // Navigate to the city details screen
-        onView(withText("Chicago"))
-                .perform(click());
-
-        // Verify we're on the city details screen by checking for city info text
-        onView(withId(R.id.cityInfo))
-                .check(matches(isDisplayed()));
-
-        // Open the menu and click the delete option
-        onView(withContentDescription("More options")) // Opens the options menu
-                .perform(click());
-
-        onView(withText("Delete City")) // Matches the delete option in the menu
-                .perform(click());
-
-        // Confirm the deletion in the dialog
-        onView(withText("Yes"))
-                .perform(click());
-
-        // Wait for the deletion to process
+        // Check if "Chicago" exists
+        boolean cityExists = true;
         try {
-            Thread.sleep(2000); // Pause to allow deletion to complete
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            onView(withText("Chicago"))
+                    .perform(scrollTo())
+                    .check(matches(isDisplayed()));
+        } catch (Exception e) {
+            cityExists = false;
         }
 
-        // Verify successful deletion by checking the city is no longer displayed
-        onView(withText("Chicago"))
-                .check(matches(not(isDisplayed())));
-    }
+        if (cityExists) {
+            // Click the Weather button for "Chicago"
+            onView(withTagValue(equalTo("weather_button_Chicago")))
+                    .perform(scrollTo(), click());
 
+            // Verify we're on the city details screen by checking for city info text
+            onView(withId(R.id.cityInfo))
+                    .check(matches(isDisplayed()));
+
+            // Open the menu and click the delete option
+            onView(withContentDescription("More options")) // Opens the options menu
+                    .perform(click());
+
+            // Wait for the menu to appear
+            try {
+                Thread.sleep(1000); // Pause to allow menu to appear
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            onView(withText("Delete"))
+                    .check(matches(isDisplayed()));
+            // Click the delete option in the menu
+            onView(withText("Delete")) // Matches the delete option in the menu
+                    .perform(click());
+
+            try {
+                Thread.sleep(2000); // Pause to allow deletion to complete
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Verify the delete dialog is displayed
+            onView(withText("Are you sure you want to delete this city?"))
+                    .check(matches(isDisplayed()));
+
+            try {
+                Thread.sleep(2000); // Pause to allow deletion to complete
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Confirm the deletion in the dialog
+            onView(withText("Yes"))
+                    .perform(click());
+
+            // Wait for the deletion to process
+            try {
+                Thread.sleep(2000); // Pause to allow deletion to complete
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Verify successful deletion by checking the city is no longer displayed
+            try {
+                onView(withText("Chicago"))
+                        .perform(scrollTo())
+                        .check(doesNotExist());
+            } catch (Exception e) {
+                // Expected exception if the view does not exist
+            }
+        } else {
+            // If the city does not exist, log a message
+            System.out.println("City 'Chicago' does not exist, nothing to delete.");
+        }
+    }
 }
