@@ -26,6 +26,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * UI tests for user registration functionality in the application.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class UserRegisterTest {
@@ -36,6 +39,10 @@ public class UserRegisterTest {
     private FirebaseAuth mAuth;
     private View decorView;
 
+    /**
+     * Sets up the test environment by signing out any logged-in user,
+     * navigating to the register page, and initializing the decor view.
+     */
     @Before
     public void setUp() {
         mAuth = FirebaseAuth.getInstance();
@@ -51,6 +58,9 @@ public class UserRegisterTest {
         onView(withId(R.id.registerNow)).perform(click());
     }
 
+    /**
+     * Cleans up after each test by signing out the user and introducing a delay for stability.
+     */
     @After
     public void tearDown() {
         if (mAuth.getCurrentUser() != null) {
@@ -65,6 +75,9 @@ public class UserRegisterTest {
         }
     }
 
+    /**
+     * Verifies that all elements on the registration screen are displayed.
+     */
     @Test
     public void testAllElementsDisplayed() {
         // Check title text
@@ -96,6 +109,9 @@ public class UserRegisterTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Verifies that attempting to register with empty fields shows an appropriate error message.
+     */
     @Test
     public void testEmptyFields() {
         // Click register without entering any data
@@ -108,6 +124,9 @@ public class UserRegisterTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Verifies that attempting to register with mismatched passwords shows an appropriate error message.
+     */
     @Test
     public void testPasswordMismatch() {
         // Enter username
@@ -130,6 +149,9 @@ public class UserRegisterTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Verifies that attempting to register with an email-like username shows an appropriate error message.
+     */
     @Test
     public void testEmailPatternValidation() {
         // Enter email-like username
@@ -152,6 +174,9 @@ public class UserRegisterTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Verifies that clicking the login link navigates back to the login screen.
+     */
     @Test
     public void testNavigateBackToLogin() {
         // Click on login link
@@ -163,6 +188,9 @@ public class UserRegisterTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Verifies the functionality of the theme switch toggle on the registration screen.
+     */
     @Test
     public void testThemeSwitchFunctionality() {
         // Check initial state
@@ -178,6 +206,9 @@ public class UserRegisterTest {
                 .perform(click());
     }
 
+    /**
+     * Verifies successful registration by checking redirection to the main activity and success message.
+     */
     @Test
     public void testSuccessfulRegistration() {
         // Randomly generate a user name:
@@ -225,6 +256,9 @@ public class UserRegisterTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Verifies that attempting to register with an already existing username shows an error message.
+     */
     @Test
     public void testDuplicateRegistration() {
         // Add delay at start of test

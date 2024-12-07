@@ -29,7 +29,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.hamcrest.Matchers;
 
-
+/**
+ * UI tests for user login functionality in the application.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class UserLoginTest {
@@ -40,6 +42,9 @@ public class UserLoginTest {
     private FirebaseAuth mAuth;
     private View decorView;
 
+    /**
+     * Sets up the test environment by ensuring the user is logged out and initializing the decor view.
+     */
     @Before
     public void setUp() {
         mAuth = FirebaseAuth.getInstance();
@@ -56,6 +61,9 @@ public class UserLoginTest {
         });
     }
 
+    /**
+     * Cleans up after each test by signing out the user if logged in.
+     */
     @After
     public void tearDown() {
         // Clean up after each test
@@ -64,6 +72,9 @@ public class UserLoginTest {
         }
     }
 
+    /**
+     * Verifies that a valid login successfully navigates to the main activity.
+     */
     @Test
     public void testValidLogin() {
         // Enter username
@@ -90,6 +101,9 @@ public class UserLoginTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Verifies that leaving the username field empty during login shows an appropriate error message.
+     */
     @Test
     public void testEmptyUsername() {
         // Enter only password
@@ -114,6 +128,9 @@ public class UserLoginTest {
 
     }
 
+    /**
+     * Verifies that leaving the password field empty during login shows an appropriate error message.
+     */
     @Test
     public void testEmptyPassword() {
         // Enter only username
@@ -137,6 +154,9 @@ public class UserLoginTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Verifies that invalid credentials show an error message and the login button remains available.
+     */
     @Test
     public void testInvalidCredentials() {
         // Enter invalid username and password
@@ -166,6 +186,9 @@ public class UserLoginTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Verifies navigation to the registration screen when clicking the "Register Now" link.
+     */
     @Test
     public void testNavigateToRegister() {
         // Click on register link
@@ -179,6 +202,9 @@ public class UserLoginTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Verifies that all UI elements in the login screen are displayed correctly.
+     */
     @Test
     public void testAllElementsDisplayed() {
         // Check input fields
@@ -211,7 +237,5 @@ public class UserLoginTest {
         // Check theme switch
         onView(withId(R.id.themeSwitch))
                 .check(matches(isDisplayed()));
-//        onView(withText("Dark Mode"))
-//                .check(matches(isDisplayed()));
     }
 }

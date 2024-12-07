@@ -26,6 +26,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * UI tests for user logout functionality in the application.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class UserLogoutTest {
@@ -36,6 +39,10 @@ public class UserLogoutTest {
     private FirebaseAuth mAuth;
     private View decorView;
 
+    /**
+     * Sets up the test environment by signing out any logged-in user
+     * and initializing the decor view for UI verification.
+     */
     @Before
     public void setUp() {
         mAuth = FirebaseAuth.getInstance();
@@ -51,6 +58,9 @@ public class UserLogoutTest {
         });
     }
 
+    /**
+     * Cleans up after each test by signing out the user if logged in.
+     */
     @After
     public void tearDown() {
         // Clean up after each test
@@ -59,6 +69,13 @@ public class UserLogoutTest {
         }
     }
 
+    /**
+     * Verifies that the user can successfully log out.
+     * The test involves:
+     * - Logging in with valid credentials.
+     * - Navigating to the main screen.
+     * - Logging out and returning to the login screen.
+     */
     @Test
     public void testLogout() {
         // Log in with valid credentials first
