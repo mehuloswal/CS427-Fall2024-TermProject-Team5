@@ -31,7 +31,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 
 
-
+/**
+ * UI tests for the Weather Insights feature in the application.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class WeatherInsightTest {
@@ -41,6 +43,10 @@ public class WeatherInsightTest {
     public ActivityScenarioRule<WeatherInsightsActivity> mActivityRule =
             new ActivityScenarioRule<>(WeatherInsightsActivity.class);
 
+    /**
+     * Sets up the test environment by ensuring a clean login state.
+     * If a user is logged in, it signs out and then performs login.
+     */
     @Before
     public void setUp() {
         // Ensure the user is logged out for a clean state
@@ -53,6 +59,10 @@ public class WeatherInsightTest {
         performLogin();
     }
 
+    /**
+     * Helper method to log in to the application before tests.
+     * Ensures the user is logged in by providing valid credentials.
+     */
     private void performLogin() {
         // Launch the login activity
         ActivityScenario.launch(Login.class);
@@ -78,6 +88,9 @@ public class WeatherInsightTest {
 
     }
 
+    /**
+     * Cleans up after each test by signing out the user if logged in.
+     */
     @After
     public void tearDown() {
         // Clean up after each test
@@ -86,7 +99,10 @@ public class WeatherInsightTest {
         }
     }
 
-
+    /**
+     * Verifies that dynamically generated weather-related questions
+     * are displayed as buttons in the Weather Insights page.
+     */
     @Test
     public void testGeneratedQuestionsDisplayedAsButtons() {
         // Step 1: Locate and click the first weather button using its tag
@@ -99,6 +115,10 @@ public class WeatherInsightTest {
         onView(withId(R.id.questionContainer)).check(matches(isDisplayed()));
     }
 
+    /**
+     * Verifies that clicking a dynamically generated question button
+     * triggers the generation of an appropriate response.
+     */
     @Test
     public void testClickQuestionButtonTriggersAnswerGeneration() {
         // Step 1: Navigate to the Weather Insights page
@@ -127,7 +147,4 @@ public class WeatherInsightTest {
         // Step 4: Verify the response text is displayed
         onView(withId(R.id.responseText)).check(matches(isDisplayed()));
     }
-
-
-
 }
