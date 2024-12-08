@@ -99,6 +99,11 @@ public class UserLoginTest {
         // Verify that we're on the main activity by checking if the logout button is displayed
         onView(withId(R.id.logout_btn))
                 .check(matches(isDisplayed()));
+
+        // Verify that the action bar title contains the username
+        String expectedTitle = "Team 5 - ruipeng2";  // Our app_name is "Team 5"
+        onView(withText(expectedTitle))
+                .check(matches(isDisplayed()));
     }
 
     /**
@@ -116,7 +121,7 @@ public class UserLoginTest {
 
         // Wait for toast
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

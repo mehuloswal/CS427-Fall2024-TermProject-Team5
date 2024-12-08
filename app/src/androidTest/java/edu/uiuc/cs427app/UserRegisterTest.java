@@ -254,6 +254,17 @@ public class UserRegisterTest {
         onView(withText("User created successfully"))
                 .inRoot(withDecorView(Matchers.not(decorView)))
                 .check(matches(isDisplayed()));
+
+        try {
+            Thread.sleep(1000); // Longer wait to allow for main page redirection
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Verify that the action bar title contains the username
+        String expectedTitle = "Team 5 - " + randomUsername;  // Our app_name is "Team 5"
+        onView(withText(expectedTitle))
+                .check(matches(isDisplayed()));
     }
 
     /**
