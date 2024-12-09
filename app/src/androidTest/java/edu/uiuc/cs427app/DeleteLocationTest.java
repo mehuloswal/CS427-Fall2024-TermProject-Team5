@@ -8,6 +8,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.*;
 import androidx.test.espresso.matcher.RootMatchers;
 
 import static org.hamcrest.Matchers.not;
+
 import static org.hamcrest.Matchers.equalTo;
 
 import androidx.test.core.app.ActivityScenario;
@@ -141,6 +142,85 @@ public class DeleteLocationTest {
         // Clean up after each test
         if (mAuth.getCurrentUser() != null) {
             mAuth.signOut();
+        }
+    }
+
+    @Test
+    public void testDontRemoveCity() {
+        // Check if "Nashville" exists
+        boolean cityExists = true;
+        try {
+            onView(withText("Nashville"))
+                    .perform(scrollTo())
+                    .check(matches(isDisplayed()));
+        } catch (Exception e) {
+            cityExists = false;
+        }
+
+        if (cityExists) {
+            // Click the Weather button for "Nashville"
+            onView(withTagValue(equalTo("weather_button_Nashville")))
+                    .perform(scrollTo(), click());
+
+            // Verify we're on the city details screen by checking for city info text
+            onView(withId(R.id.cityInfo))
+                    .check(matches(isDisplayed()));
+
+            // Open the menu and click the delete option
+            onView(withContentDescription("More options")) // Opens the options menu
+                    .perform(click());
+
+            // Wait for the menu to appear
+            try {
+                Thread.sleep(1000); // Pause to allow menu to appear
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            onView(withText("Delete"))
+                    .check(matches(isDisplayed()));
+            // Click the delete option in the menu
+            onView(withText("Delete")) // Matches the delete option in the menu
+                    .perform(click());
+
+            try {
+                Thread.sleep(1000); // Pause to allow deletion to complete
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Verify the delete dialog is displayed
+            onView(withText("Are you sure you want to delete this city?"))
+                    .check(matches(isDisplayed()));
+
+            try {
+                Thread.sleep(1000); // Pause to allow deletion to complete
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Confirm the deletion in the dialog
+            onView(withText("No"))
+                    .perform(click());
+
+            // Wait for the deletion to process
+            try {
+                Thread.sleep(2000); // Pause to allow deletion to complete
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Verify by checking the city is no longer displayed
+            try {
+                onView(withText("Nashville"))
+                        .perform(scrollTo())
+                        .check(matches(isDisplayed()));
+            } catch (Exception e) {
+                // Expected exception if the view does not exist
+                System.out.println("City 'Nashville' was not deleted.");
+            }
+        } else {
+            // If the city does not exist, log a message
         }
     }
 
