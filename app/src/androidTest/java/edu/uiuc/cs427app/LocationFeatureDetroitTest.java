@@ -4,7 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
+import androidx.test.espresso.matcher.RootMatchers;
 import static org.hamcrest.Matchers.allOf;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -23,10 +23,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Instrumented test to verify the map feature for "Chicago".
+ * Instrumented test to verify the map feature for "Detroit".
  */
 @RunWith(AndroidJUnit4.class)
-public class LocationFeatureChicagoTest {
+public class LocationFeatureDetroitTest {
 
     private FirebaseAuth mAuth;
 
@@ -42,8 +42,8 @@ public class LocationFeatureChicagoTest {
         }
         // Perform login
         performLogin();
-        // Ensure "Chicago" is in the city list
-        ensureCityExists("Chicago");
+        // Ensure "Detroit" is in the city list
+        ensureCityExists("Detroit");
     }
 
     /**
@@ -109,12 +109,16 @@ public class LocationFeatureChicagoTest {
 
         // Verify that we're on the AddLocation activity
         onView(withId(R.id.addCityButton))
-                .perform(scrollTo())
                 .check(matches(isDisplayed()));
 
         // Type the city name
         onView(withId(R.id.cityAutoCompleteTextView))
                 .perform(typeText(cityName), closeSoftKeyboard());
+
+        // Select the city from the dropdown
+        onView(withText(cityName))
+                .inRoot(RootMatchers.isPlatformPopup())
+                .perform(click());
 
         // Click "Add City" button
         onView(withId(R.id.addCityButton))
@@ -145,27 +149,27 @@ public class LocationFeatureChicagoTest {
     }
 
     /**
-     * Test the map feature for "Chicago".
+     * Test the map feature for "Detroit".
      * Includes actions and assertions for testing the map functionality.
      */
     @Test
-    public void testMapFeatureChicago() {
-        // Verify "Chicago" is displayed
-        onView(withText("Chicago"))
+    public void testMapFeatureDetroit() {
+        // Verify "Detroit" is displayed
+        onView(withText("Detroit"))
                 .perform(scrollTo())
                 .check(matches(isDisplayed()));
 
         // Locate the parent layout containing the city name and its buttons
         onView(allOf(
-                hasDescendant(withText("Chicago")),
+                hasDescendant(withText("Detroit")),
                 isDescendantOfA(withId(R.id.cityListContainer))))
                 .check(matches(isDisplayed()));
 
-        // Click the "MAP" button within the same layout as "Chicago"
+        // Click the "MAP" button within the same layout as "Detroit"
         onView(allOf(
                 withText("Map"), // Text of the "Map" button
                 isDescendantOfA(allOf(
-                        hasDescendant(withText("Chicago")), // Ensure it's in the layout containing "Chicago"
+                        hasDescendant(withText("Detroit")), // Ensure it's in the layout containing "Detroit"
                         isDescendantOfA(withId(R.id.cityListContainer))))))
                 .perform(scrollTo(), click());
 
@@ -178,7 +182,7 @@ public class LocationFeatureChicagoTest {
 
         // Verify that the map activity is displayed by checking for city name
         onView(withId(R.id.cityNameTextView))
-                .check(matches(withText("Chicago")));
+                .check(matches(withText("Detroit")));
 
         // Verify that the map view is displayed
         onView(withId(R.id.mapView))

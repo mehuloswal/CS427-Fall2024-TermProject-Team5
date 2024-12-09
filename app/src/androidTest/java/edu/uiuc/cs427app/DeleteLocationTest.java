@@ -5,6 +5,7 @@ import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
+import androidx.test.espresso.matcher.RootMatchers;
 
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.equalTo;
@@ -43,8 +44,8 @@ public class DeleteLocationTest {
         // Perform login
         performLogin();
 
-        // Ensure "Chicago" exists in the city list
-        ensureCityExists("Chicago");
+        // Ensure "Nashville" exists in the city list
+        ensureCityExists("Nashville");
     }
 
     private void performLogin() {
@@ -107,12 +108,16 @@ public class DeleteLocationTest {
 
         // Verify that we're on the AddLocation activity
         onView(withId(R.id.addCityButton))
-                .perform(scrollTo())
                 .check(matches(isDisplayed()));
 
         // Type the city name
         onView(withId(R.id.cityAutoCompleteTextView))
                 .perform(typeText(cityName), closeSoftKeyboard());
+
+        // Select the city from the dropdown
+        onView(withText(cityName))
+                .inRoot(RootMatchers.isPlatformPopup())
+                .perform(click());
 
         // Click "Add City" button
         onView(withId(R.id.addCityButton))
@@ -120,7 +125,7 @@ public class DeleteLocationTest {
 
         // Wait for the city to be added
         try {
-            Thread.sleep(2000); // Pause for city to be added
+            Thread.sleep(1000); // Pause for city to be added
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -141,10 +146,10 @@ public class DeleteLocationTest {
 
     @Test
     public void testRemoveCity() {
-        // Check if "Chicago" exists
+        // Check if "Nashville" exists
         boolean cityExists = true;
         try {
-            onView(withText("Chicago"))
+            onView(withText("Nashville"))
                     .perform(scrollTo())
                     .check(matches(isDisplayed()));
         } catch (Exception e) {
@@ -152,8 +157,8 @@ public class DeleteLocationTest {
         }
 
         if (cityExists) {
-            // Click the Weather button for "Chicago"
-            onView(withTagValue(equalTo("weather_button_Chicago")))
+            // Click the Weather button for "Nashville"
+            onView(withTagValue(equalTo("weather_button_Nashville")))
                     .perform(scrollTo(), click());
 
             // Verify we're on the city details screen by checking for city info text
@@ -178,7 +183,7 @@ public class DeleteLocationTest {
                     .perform(click());
 
             try {
-                Thread.sleep(2000); // Pause to allow deletion to complete
+                Thread.sleep(1000); // Pause to allow deletion to complete
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -188,7 +193,7 @@ public class DeleteLocationTest {
                     .check(matches(isDisplayed()));
 
             try {
-                Thread.sleep(2000); // Pause to allow deletion to complete
+                Thread.sleep(1000); // Pause to allow deletion to complete
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -206,15 +211,16 @@ public class DeleteLocationTest {
 
             // Verify successful deletion by checking the city is no longer displayed
             try {
-                onView(withText("Chicago"))
+                onView(withText("Nashville"))
                         .perform(scrollTo())
                         .check(doesNotExist());
             } catch (Exception e) {
                 // Expected exception if the view does not exist
+                System.out.println("City 'Nashville' was successfully deleted.");
             }
         } else {
             // If the city does not exist, log a message
-            System.out.println("City 'Chicago' does not exist, nothing to delete.");
+            System.out.println("City 'Nashville' does not exist, nothing to delete.");
         }
     }
 }

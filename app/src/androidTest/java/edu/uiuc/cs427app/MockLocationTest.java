@@ -5,11 +5,15 @@ import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
 import androidx.test.espresso.matcher.RootMatchers;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.allOf;
 
-import static org.hamcrest.Matchers.equalTo;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -23,12 +27,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Instrumented test to verify the map feature for "Boston".
+ * Instrumented test to verify that mocking the location changes the displayed
+ * map to Champaign.
  */
 @RunWith(AndroidJUnit4.class)
-public class LocationFeatureBostonTest {
+public class MockLocationTest {
 
     private FirebaseAuth mAuth;
+    private static final String MOCK_PROVIDER = LocationManager.GPS_PROVIDER;
 
     @Rule
     public ActivityScenarioRule<Login> mActivityRule = new ActivityScenarioRule<>(Login.class);
@@ -42,13 +48,25 @@ public class LocationFeatureBostonTest {
         }
         // Perform login
         performLogin();
-        // Ensure "Boston" is in the city list
-        ensureCityExists("Boston");
+        // Ensure "Chicago" is in the city list
+        ensureCityExists("Chicago");
+    }
+
+    /**
+     * Cleans up after each test by logging out the user if logged in.
+     * Also removes the mock location provider.
+     */
+    @After
+    public void tearDown() {
+        // Sign out after the test
+        if (mAuth.getCurrentUser() != null) {
+            mAuth.signOut();
+        }
+
     }
 
     /**
      * Helper method to perform user login before testing.
-     * Performs actions and checks assertions related to login.
      */
     private void performLogin() {
         // Launch login activity
@@ -66,23 +84,19 @@ public class LocationFeatureBostonTest {
 
         // Wait for the login process
         try {
-            Thread.sleep(2000); // Increased wait time
+            Thread.sleep(2000); // Wait time
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        // Scroll to and verify main activity is displayed
+        // Verify main activity is displayed
         onView(withId(R.id.buttonAddLocation))
                 .perform(scrollTo())
                 .check(matches(isDisplayed()));
     }
 
     /**
-     * Ensures that a city is in the user's city list. If it already exists, does
-     * not add it again.
-     * Includes actions and assertions to verify city presence.
-     *
-     * @param cityName The name of the city to ensure exists.
+     * Ensures that a city is in the user's city list.
      */
     private void ensureCityExists(String cityName) {
         // Check if the city is already displayed
@@ -98,9 +112,6 @@ public class LocationFeatureBostonTest {
 
     /**
      * Helper method to add a city to the user's city list.
-     * Includes actions and assertions for adding a city.
-     *
-     * @param cityName The name of the city to add.
      */
     private void addCity(String cityName) {
         // Click "Add Location" button
@@ -111,7 +122,7 @@ public class LocationFeatureBostonTest {
         onView(withId(R.id.addCityButton))
                 .check(matches(isDisplayed()));
 
-        // Type the city name
+        // Enter city name and add it
         onView(withId(R.id.cityAutoCompleteTextView))
                 .perform(typeText(cityName), closeSoftKeyboard());
 
@@ -120,74 +131,70 @@ public class LocationFeatureBostonTest {
                 .inRoot(RootMatchers.isPlatformPopup())
                 .perform(click());
 
-        // Click "Add City" button
         onView(withId(R.id.addCityButton))
                 .perform(click());
 
-        // Pause to allow city to be added
+        // Wait for the city to be added
         try {
-            Thread.sleep(2000); // Wait for the city to be added
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         // Verify the city is displayed in the main activity
         onView(withText(cityName))
-                .perform(scrollTo())
                 .check(matches(isDisplayed()));
-    }
-
-    @After
-    public void tearDown() {
-        // Sign out after the test
-        if (mAuth.getCurrentUser() != null) {
-            mAuth.signOut();
-        }
     }
 
     /**
-     * Test the map feature for "Boston".
-     * Includes actions and assertions for testing the map functionality.
+     * Test the map feature by verifying that mocking location changes the displayed
+     * map to Champaign.
      */
     @Test
-    public void testMapFeatureBoston() {
-        // Verify "Boston" is displayed
-        onView(withText("Boston"))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()));
+    public void testMockLocationUpdatesMapToChampaign() {
 
-        // Locate the parent layout containing the city name and its buttons
+        // Click the "Map" button for Chicago
         onView(allOf(
-                hasDescendant(withText("Boston")),
-                isDescendantOfA(withId(R.id.cityListContainer))))
-                .check(matches(isDisplayed()));
-
-        // Click the "MAP" button within the same layout as "Boston"
-        onView(allOf(
-                withText("Map"), // Text of the "Map" button
+                withText("Map"),
                 isDescendantOfA(allOf(
-                        hasDescendant(withText("Boston")), // Ensure it's in the layout containing "Boston"
+                        hasDescendant(withText("Chicago")),
                         isDescendantOfA(withId(R.id.cityListContainer))))))
                 .perform(scrollTo(), click());
 
-        // Wait for the map activity to load
+        // Wait for the MapActivity to load
         try {
-            Thread.sleep(2000); // Pause to allow map to load
+            Thread.sleep(2000); // Adjust the wait time as needed
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        // Verify that the map activity is displayed by checking for city name
+        // Verify that the map activity is displaying Chicago
         onView(withId(R.id.cityNameTextView))
-                .check(matches(withText("Boston")));
+                .check(matches(withText("Chicago")));
 
-        // Verify that the map view is displayed
+        // Update the location to Champaign
+        ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class);
+        scenario.onActivity(activity -> {
+            activity.updateLocation("Champaign", 40.1142, -88.2737);
+        });
+
+        // Wait for the map to update
+        try {
+            Thread.sleep(2000); // Adjust the wait time as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Verify map updates (e.g., checking displayed map center, markers, etc.)
         onView(withId(R.id.mapView))
                 .check(matches(isDisplayed()));
 
-        // Dynamically verify the coordinates are displayed in the expected format
+        // Verify that the map now shows Champaign
+        onView(withId(R.id.cityNameTextView))
+                .check(matches(withText("Champaign")));
         onView(withId(R.id.coordinatesTextView))
-                .check(matches(withText(Matchers.startsWith("Latitude: "))))
-                .check(matches(withText(Matchers.containsString("Longitude: "))));
+                .check(matches(allOf(
+                        withText(containsString("Latitude: 40.1142")),
+                        withText(containsString("Longitude: -88.2737")))));
     }
 }

@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
+import androidx.test.espresso.matcher.RootMatchers;
 
 import static org.hamcrest.Matchers.equalTo;
 
@@ -109,22 +110,35 @@ public class WeatherFeatureBostonTest {
          * @param cityName Name of the city to add
          */
         private void addCity(String cityName) {
-                // Click the "Add Location" button
+                // Click "Add Location" button
                 onView(withId(R.id.buttonAddLocation))
                                 .perform(scrollTo(), click());
-                sleep(500);
 
-                // Input the city name and close the keyboard
+                // Verify that we're on the AddLocation activity
+                onView(withId(R.id.addCityButton))
+                                .check(matches(isDisplayed()));
+
+                // Type the city name
                 onView(withId(R.id.cityAutoCompleteTextView))
                                 .perform(typeText(cityName), closeSoftKeyboard());
-                sleep(500);
 
-                // Click the "Add City" button
+                // Select the city from the dropdown
+                onView(withText(cityName))
+                                .inRoot(RootMatchers.isPlatformPopup())
+                                .perform(click());
+
+                // Click "Add City" button
                 onView(withId(R.id.addCityButton))
                                 .perform(click());
-                sleep(2000);
 
-                // Verify that the city is displayed in the list
+                // Wait for the city to be added
+                try {
+                        Thread.sleep(1000); // Pause for city to be added
+                } catch (InterruptedException e) {
+                        e.printStackTrace();
+                }
+
+                // Verify the city is displayed in the main activity
                 onView(withText(cityName))
                                 .perform(scrollTo())
                                 .check(matches(isDisplayed()));

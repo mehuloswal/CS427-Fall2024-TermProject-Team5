@@ -19,6 +19,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private double latitude;
     private double longitude;
     private MapView mapView;
+    private GoogleMap googleMap;
 
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
 
@@ -37,18 +38,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        // Extracts city information from the intent.
+        // Extract city information from the intent
         cityName = getIntent().getStringExtra("cityName");
         latitude = getIntent().getDoubleExtra("latitude", 0);
         longitude = getIntent().getDoubleExtra("longitude", 0);
 
-        // Displays city name and coordinates.
+        // Display city name and coordinates
         TextView cityNameTextView = findViewById(R.id.cityNameTextView);
         TextView coordinatesTextView = findViewById(R.id.coordinatesTextView);
         cityNameTextView.setText(cityName);
         coordinatesTextView.setText("Latitude: " + latitude + ", Longitude: " + longitude);
 
-        // Initializes the map view.
+        // Initialize the map view
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
@@ -61,6 +62,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapView.getMapAsync(this);
     }
 
+    // Add this method in MapActivity.java
+
+    public void updateLocation(String cityName, double latitude, double longitude) {
+        this.cityName = cityName;
+        this.latitude = latitude;
+        this.longitude = longitude;
+
+        // Update UI elements
+        TextView cityNameTextView = findViewById(R.id.cityNameTextView);
+        TextView coordinatesTextView = findViewById(R.id.coordinatesTextView);
+        cityNameTextView.setText(cityName);
+        coordinatesTextView.setText("Latitude: " + latitude + ", Longitude: " + longitude);
+
+        // Update the map
+        if (googleMap != null) {
+            googleMap.clear();
+            LatLng cityLocation = new LatLng(latitude, longitude);
+            googleMap.addMarker(new MarkerOptions()
+                    .position(cityLocation)
+                    .title(cityName));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cityLocation, 12));
+        }
+    }
+
     /**
      * Configures the map with a marker at the city's coordinates when the map is
      * ready.
@@ -69,16 +94,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        // Create a LatLng object for the city location
-        LatLng cityLocation = new LatLng(latitude, longitude);
+        // // Create a LatLng object for the city location
+        // LatLng cityLocation = new LatLng(latitude, longitude);
 
-        // Add a marker at the city location
-        googleMap.addMarker(new MarkerOptions()
-                .position(cityLocation)
-                .title(cityName));
+        // // Add a marker at the city location
+        // googleMap.addMarker(new MarkerOptions()
+        // .position(cityLocation)
+        // .title(cityName));
 
-        // Move and zoom the camera to the city location
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cityLocation, 12));
+        // // Move and zoom the camera to the city location
+        // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cityLocation, 12));
+
+        this.googleMap = googleMap; // Store the GoogleMap instance
+        updateLocation(cityName, latitude, longitude); // Initialize the map with the initial location
     }
 
     /**

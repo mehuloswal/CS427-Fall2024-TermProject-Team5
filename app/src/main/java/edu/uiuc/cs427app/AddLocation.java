@@ -140,36 +140,78 @@ public class AddLocation extends AppCompatActivity {
     private void addCityToServer(String cityName, String userEmail) {
         new Thread(() -> {
             try {
-                URL url = new URL(Config.API_URL + "addCity"); // Using 10.0.2.2 for local development
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "application/json");
-                conn.setDoOutput(true);
+                // First, get the user's existing cities
+                URL getUrl = new URL(Config.API_URL + "getCity?userEmail=" + userEmail);
+                HttpURLConnection getConn = (HttpURLConnection) getUrl.openConnection();
+                getConn.setRequestMethod("GET");
 
-                // Creating JSON object to send in request
-                JSONObject jsonParam = new JSONObject();
-                jsonParam.put("cityName", cityName);
-                jsonParam.put("userEmail", userEmail);
+                int getResponseCode = getConn.getResponseCode();
+                if (getResponseCode == HttpURLConnection.HTTP_OK) {
+                    // Read response
+                    BufferedReader in = new BufferedReader(new InputStreamReader(getConn.getInputStream()));
+                    StringBuilder getResponse = new StringBuilder();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        getResponse.append(inputLine);
+                    }
+                    in.close();
 
-                // Sending JSON data
-                try (OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream())) {
-                    writer.write(jsonParam.toString());
-                    writer.flush();
-                }
+                    // Parse JSON response
+                    JSONArray jsonArray = new JSONArray(getResponse.toString());
+                    boolean cityExists = false;
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject cityObject = jsonArray.getJSONObject(i);
+                        String existingCityName = cityObject.getString("city_name");
+                        if (existingCityName.equalsIgnoreCase(cityName)) {
+                            cityExists = true;
+                            break;
+                        }
+                    }
 
-                int responseCode = conn.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    runOnUiThread(() -> {
-                        Toast.makeText(AddLocation.this, "City added successfully!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(AddLocation.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    });
+                    if (cityExists) {
+                        // City already exists, show message
+                        runOnUiThread(() -> {
+                            Toast.makeText(AddLocation.this, "City already exists.", Toast.LENGTH_SHORT).show();
+                        });
+                    } else {
+                        // City does not exist, proceed to add
+                        URL url = new URL(Config.API_URL + "addCity");
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("POST");
+                        conn.setRequestProperty("Content-Type", "application/json");
+                        conn.setDoOutput(true);
+
+                        // Creating JSON object to send in request
+                        JSONObject jsonParam = new JSONObject();
+                        jsonParam.put("cityName", cityName);
+                        jsonParam.put("userEmail", userEmail);
+
+                        // Sending JSON data
+                        try (OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream())) {
+                            writer.write(jsonParam.toString());
+                            writer.flush();
+                        }
+
+                        int responseCode = conn.getResponseCode();
+                        if (responseCode == HttpURLConnection.HTTP_OK) {
+                            runOnUiThread(() -> {
+                                Toast.makeText(AddLocation.this, "City added successfully!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(AddLocation.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            });
+                        } else {
+                            runOnUiThread(() -> Toast
+                                    .makeText(AddLocation.this, "Failed to add city.", Toast.LENGTH_SHORT).show());
+                        }
+                        conn.disconnect();
+                    }
                 } else {
-                    runOnUiThread(
-                            () -> Toast.makeText(AddLocation.this, "Failed to add city.", Toast.LENGTH_SHORT).show());
+                    // Failed to get existing cities
+                    runOnUiThread(() -> Toast
+                            .makeText(AddLocation.this, "Failed to fetch existing cities.", Toast.LENGTH_SHORT).show());
                 }
-                conn.disconnect();
+                getConn.disconnect();
             } catch (Exception e) {
                 runOnUiThread(
                         () -> Toast.makeText(AddLocation.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());

@@ -12,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -24,168 +25,208 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * This is the UI and functionality tests for the AddLocation feature in the application.
+ * This is the UI and functionality tests for the AddLocation feature in the
+ * application.
  */
 @RunWith(AndroidJUnit4.class)
 public class AddLocationTest {
 
-    private FirebaseAuth mAuth;
+        private FirebaseAuth mAuth;
 
-    @Rule
-    public ActivityScenarioRule<Login> mActivityRule = new ActivityScenarioRule<>(Login.class);
+        @Rule
+        public ActivityScenarioRule<Login> mActivityRule = new ActivityScenarioRule<>(Login.class);
 
-    /**
-     * Sets up the test environment by ensuring the user is logged out
-     *  and performing login before the tests are conducted.
-     */
-    @Before
-    public void setUp() {
-        // Ensure the user is logged out for a clean state
-        mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() != null) {
-            mAuth.signOut();
+        /**
+         * Sets up the test environment by ensuring the user is logged out
+         * and performing login before the tests are conducted.
+         */
+        @Before
+        public void setUp() {
+                // Ensure the user is logged out for a clean state
+                mAuth = FirebaseAuth.getInstance();
+                if (mAuth.getCurrentUser() != null) {
+                        mAuth.signOut();
+                }
+
+                // Perform login
+                performLogin();
         }
 
-        // Perform login
-        performLogin();
-    }
+        /**
+         * Helper method to log user in.
+         * Launches the login activity, enters credentials, and verifies successful
+         * login.
+         */
+        private void performLogin() {
+                // Launch the login activity
+                ActivityScenario.launch(Login.class);
 
-    /**
-     * Helper method to log user in.
-     * Launches the login activity, enters credentials, and verifies successful login.
-     */
-    private void performLogin() {
-        // Launch the login activity
-        ActivityScenario.launch(Login.class);
+                // Enter username
+                onView(withId(R.id.username))
+                                .perform(typeText("ruipeng2"), closeSoftKeyboard());
 
-        // Enter username
-        onView(withId(R.id.username))
-                .perform(typeText("ruipeng2"), closeSoftKeyboard());
+                // Enter password
+                onView(withId(R.id.password))
+                                .perform(typeText("123456"), closeSoftKeyboard());
 
-        // Enter password
-        onView(withId(R.id.password))
-                .perform(typeText("123456"), closeSoftKeyboard());
+                // Click login button
+                onView(withId(R.id.btn_login))
+                                .perform(click());
 
-        // Click login button
-        onView(withId(R.id.btn_login))
-                .perform(click());
+                // Add a small delay to allow for the login process
+                try {
+                        Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                        e.printStackTrace();
+                }
 
-        // Add a small delay to allow for the login process
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+                // Verify that we're on the main activity by checking if the "Add Location"
+                // button is displayed
+                onView(withId(R.id.buttonAddLocation))
+                                .perform(scrollTo())
+                                .check(matches(isDisplayed()));
         }
 
-        // Verify that we're on the main activity by checking if the "Add Location" button is displayed
-        onView(withId(R.id.buttonAddLocation))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()));
-    }
-
-    /**
-     * Cleans up after each test by logging out the user if logged in.
-     */
-    @After
-    public void tearDown() {
-        // Clean up after each test
-        if (mAuth.getCurrentUser() != null) {
-            mAuth.signOut();
-        }
-    }
-
-    /**
-     * Verifies that the "Add City" button works correctly when a valid city name is entered.
-     * Ensures navigation back to MainActivity after successful addition.
-     */
-    @Test
-    public void testAddCityButtonWithValidCity() {
-        // Click "Add Location" button to navigate to AddLocation screen
-        onView(withId(R.id.buttonAddLocation))
-                .perform(scrollTo(), click());
-
-        // Type a valid city name
-        onView(withId(R.id.cityAutoCompleteTextView))
-                .perform(typeText("Chicago"), closeSoftKeyboard());
-
-        // Click the "Add City" button
-        onView(withId(R.id.addCityButton))
-                .perform(click());
-
-        // Add a delay for network call
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        /**
+         * Cleans up after each test by logging out the user if logged in.
+         */
+        @After
+        public void tearDown() {
+                // Clean up after each test
+                if (mAuth.getCurrentUser() != null) {
+                        mAuth.signOut();
+                }
         }
 
-        // Verify successful addition by checking if MainActivity is displayed
-        onView(withId(R.id.logout_btn)) // Example: Check for a button in MainActivity
-                .check(matches(isDisplayed()));
-    }
+        /**
+         * Verifies that the "Add City" button works correctly when a valid city name is
+         * entered.
+         * Ensures navigation back to MainActivity after successful addition.
+         */
+        @Test
+        public void testAddCityButtonWithValidCity() {
+                // Click "Add Location" button to navigate to AddLocation screen
+                onView(withId(R.id.buttonAddLocation))
+                                .perform(scrollTo(), click());
 
-    /**
-     * Verifies that an error message is shown when attempting to add a city without entering a name.
-     */
-    @Test
-    public void testAddCityButtonWithEmptyInput() {
-        // Click "Add Location" button to navigate to AddLocation screen
-        onView(withId(R.id.buttonAddLocation))
-                .perform(scrollTo(), click());
+                // Type a valid city name into the AutoCompleteTextView
+                onView(withId(R.id.cityAutoCompleteTextView))
+                                .perform(typeText("Nashville"), closeSoftKeyboard());
 
-        // Leave the city name field empty
-        onView(withId(R.id.cityAutoCompleteTextView))
-                .perform(typeText(""), closeSoftKeyboard());
+                // Select "Nashville" from the dropdown options
+                onView(withText("Nashville"))
+                                .inRoot(RootMatchers.isPlatformPopup())
+                                .perform(click());
 
-        // Click the "Add City" button
-        onView(withId(R.id.addCityButton))
-                .perform(click());
+                // Click the "Add City" button
+                onView(withId(R.id.addCityButton))
+                                .perform(click());
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+                // Wait for the city to be added and MainActivity to be displayed
+                try {
+                        Thread.sleep(1000); // Keep the sleep as requested
+                } catch (InterruptedException e) {
+                        e.printStackTrace();
+                }
+
+                // Verify that "Nashville" is displayed in the city list
+                onView(withText("Nashville"))
+                                .perform(scrollTo())
+                                .check(matches(isDisplayed()));
         }
 
-        // Verify error message is shown
-        onView(withId(R.id.addCityButton))
-                .check(matches(isDisplayed()));
-    }
+        /**
+         * Verifies that an error message is shown when attempting to add an existing
+         * city.
+         */
+        @Test
+        public void testAddCityExistingCity() {
+                // Navigate back to AddLocation screen to add the same city again
+                onView(withId(R.id.buttonAddLocation))
+                                .perform(scrollTo(), click());
 
-    /**
-     * Verifies that autocomplete suggestions are displayed when typing a partial city name.
-     */
-    @Test
-    public void testAutoCompleteDropdownDisplay() {
-        // Click "Add Location" button to navigate to AddLocation screen
-        onView(withId(R.id.buttonAddLocation))
-                .perform(scrollTo(), click());
+                // Type the same city name into the AutoCompleteTextView
+                onView(withId(R.id.cityAutoCompleteTextView))
+                                .perform(typeText("Nashville"), closeSoftKeyboard());
 
-        // Type part of a city name to trigger autocomplete
-        onView(withId(R.id.cityAutoCompleteTextView))
-                .perform(typeText("Chi"), closeSoftKeyboard());
+                // Select "Nashville" from the dropdown options
+                onView(withText("Nashville"))
+                                .inRoot(RootMatchers.isPlatformPopup())
+                                .perform(click());
 
-        // Verify that the autocomplete suggestions are displayed
-        onView(withId(R.id.addCityButton))
-                .check(matches(isDisplayed()));
-    }
+                // Click the "Add City" button
+                onView(withId(R.id.addCityButton))
+                                .perform(click());
 
-    /**
-     * Verifies navigation to the AddLocation activity when clicking the "Add Location" button.
-     * Ensures the relevant UI elements are displayed in the AddLocation activity.
-     */
-    @Test
-    public void testAddCityNavigation() {
-        // Click "Add Location" button to navigate to AddLocation screen
-        onView(withId(R.id.buttonAddLocation))
-                .perform(scrollTo(), click());
+                // Wait for the toast message to appear
+                onView(withText("City already exists."))
+                                .inRoot(new ToastMatcher())
+                                .check(matches(isDisplayed()));
+        }
 
-        // Verify that we're on the AddLocation activity
-        onView(withId(R.id.cityAutoCompleteTextView))
-                .check(matches(isDisplayed()));
-        onView(withId(R.id.addCityButton))
-                .check(matches(isDisplayed()));
-    }
+        /**
+         * Verifies that an error message is shown when attempting to add a city without
+         * entering a name.
+         */
+        @Test
+        public void testAddCityButtonWithEmptyInput() {
+                // Click "Add Location" button to navigate to AddLocation screen
+                onView(withId(R.id.buttonAddLocation))
+                                .perform(scrollTo(), click());
+
+                // Leave the city name field empty
+                onView(withId(R.id.cityAutoCompleteTextView))
+                                .perform(typeText(""), closeSoftKeyboard());
+
+                // Click the "Add City" button
+                onView(withId(R.id.addCityButton))
+                                .perform(click());
+
+                try {
+                        Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                        e.printStackTrace();
+                }
+
+                // Verify error message is shown
+                onView(withId(R.id.addCityButton))
+                                .check(matches(isDisplayed()));
+        }
+
+        /**
+         * Verifies that autocomplete suggestions are displayed when typing a partial
+         * city name.
+         */
+        @Test
+        public void testAutoCompleteDropdownDisplay() {
+                // Click "Add Location" button to navigate to AddLocation screen
+                onView(withId(R.id.buttonAddLocation))
+                                .perform(scrollTo(), click());
+
+                // Type part of a city name to trigger autocomplete
+                onView(withId(R.id.cityAutoCompleteTextView))
+                                .perform(typeText("Nashv"), closeSoftKeyboard());
+
+                // Verify that the autocomplete suggestions are displayed
+                onView(withId(R.id.addCityButton))
+                                .check(matches(isDisplayed()));
+        }
+
+        /**
+         * Verifies navigation to the AddLocation activity when clicking the "Add
+         * Location" button.
+         * Ensures the relevant UI elements are displayed in the AddLocation activity.
+         */
+        @Test
+        public void testAddCityNavigation() {
+                // Click "Add Location" button to navigate to AddLocation screen
+                onView(withId(R.id.buttonAddLocation))
+                                .perform(scrollTo(), click());
+
+                // Verify that we're on the AddLocation activity
+                onView(withId(R.id.cityAutoCompleteTextView))
+                                .check(matches(isDisplayed()));
+                onView(withId(R.id.addCityButton))
+                                .check(matches(isDisplayed()));
+        }
 }
-
-
