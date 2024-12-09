@@ -33,6 +33,10 @@ public class LocationFeatureBostonTest {
     @Rule
     public ActivityScenarioRule<Login> mActivityRule = new ActivityScenarioRule<>(Login.class);
 
+    /**
+     * Sets up the test environment by ensuring the user is logged out, performing login,
+     * and verifying the presence of "Boston" in the city list.
+     */
     @Before
     public void setUp() {
         // Ensure the user is logged out for a clean state
@@ -137,6 +141,9 @@ public class LocationFeatureBostonTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Cleans up after the test by signing out the user if logged in.
+     */
     @After
     public void tearDown() {
         // Sign out after the test
