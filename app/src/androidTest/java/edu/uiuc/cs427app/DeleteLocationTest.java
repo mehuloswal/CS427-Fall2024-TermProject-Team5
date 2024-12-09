@@ -34,6 +34,10 @@ public class DeleteLocationTest {
     @Rule
     public ActivityScenarioRule<Login> mActivityRule = new ActivityScenarioRule<>(Login.class);
 
+    /**
+     * Sets up the test environment by ensuring a clean login state and verifying
+     * the presence of a specific city ("Nashville") in the user's city list.
+     */
     @Before
     public void setUp() {
         // Ensure the user is logged out for a clean state
@@ -49,6 +53,9 @@ public class DeleteLocationTest {
         ensureCityExists("Nashville");
     }
 
+    /**
+     * Logs in to the application with valid credentials.
+     */
     private void performLogin() {
         // Launch the login activity
         ActivityScenario.launch(Login.class);
@@ -137,6 +144,9 @@ public class DeleteLocationTest {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Cleans up the test environment by signing out any logged-in user.
+     */
     @After
     public void tearDown() {
         // Clean up after each test
@@ -145,6 +155,9 @@ public class DeleteLocationTest {
         }
     }
 
+    /**
+     * Verifies that the user can open the delete dialog but choose not to delete the city.
+     */
     @Test
     public void testDontRemoveCity() {
         // Check if "Nashville" exists
@@ -224,6 +237,9 @@ public class DeleteLocationTest {
         }
     }
 
+    /**
+     * Verifies that the user can successfully delete a city from their list.
+     */
     @Test
     public void testRemoveCity() {
         // Check if "Nashville" exists
