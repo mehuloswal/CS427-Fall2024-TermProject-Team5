@@ -185,7 +185,7 @@ Meeting notes: Finished Assigned Tasks. Thinking about ways to implement @Before
 | rajan11 | Finshed Writing tests assigned from previous week | Complete Milestone 5 and help with leftovers. |
 | zexinl2 | Finshed Writing tests assigned from previous week | Complete Milestone 5 and help with leftovers. |
 | ac163 | Finshed Writing tests assigned from previous week | Complete Milestone 5 and help with leftovers. |
-| ruipeng2 | Finshed Writing tests assigned from previous week and generate the report.| Add Docstrings and remaining tests for other testing functions and Complete Mileston 5|
+| ruipeng2 | Finshed Writing tests assigned from previous week and generate the report.| Add Docstrings and remaining tests for other testing functions and Complete Milestone 5|
 | | | |
 </br>
 
