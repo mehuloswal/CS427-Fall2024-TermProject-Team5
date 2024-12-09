@@ -39,6 +39,10 @@ public class MockLocationTest {
     @Rule
     public ActivityScenarioRule<Login> mActivityRule = new ActivityScenarioRule<>(Login.class);
 
+    /**
+     * Sets up the test environment by ensuring the user is logged out,
+     * performing login, and verifying the presence of "Chicago" in the city list.
+     */
     @Before
     public void setUp() {
         // Ensure the user is logged out for a clean state

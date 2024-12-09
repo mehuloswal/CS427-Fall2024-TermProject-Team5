@@ -33,6 +33,10 @@ public class LocationFeatureDetroitTest {
     @Rule
     public ActivityScenarioRule<Login> mActivityRule = new ActivityScenarioRule<>(Login.class);
 
+    /**
+     * Sets up the test environment by ensuring a clean state, performing login,
+     * and verifying the presence of "Detroit" in the user's city list.
+     */
     @Before
     public void setUp() {
         // Ensure the user is logged out for a clean state
