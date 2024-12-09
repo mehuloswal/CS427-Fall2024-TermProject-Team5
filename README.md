@@ -155,37 +155,37 @@ Meeting notes: Synced and every member exchanged their ideas and updates. Assign
 
 <b>Week 8</b>
 </br>
-Members present: List the NetID of the people who attended the meeting
+Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6, rajan11, ac163
 </br>
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: Discussed the task and the way to approach and assigned the tasks to the members.
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
+| mehuljo2 | Finished Reading about Milestone 5. | Write Tests for Location Feature (two cities)|
+| pranav31 | Finished Reading about Milestone 5. | Write Tests for Delete a city |
+| wenqi6 | Finished Reading about Milestone 5. | Write Tests for Weather Insights Button |
+| rajan11 | Finished Reading about Milestone 5. | Write Tests for Weather Feature (two cities) |
+| zexinl2 | Finished Reading about Milestone 5. | Write Tests for Adding a new City |
+| ac163 | Finished Reading about Milestone 5. | Write Tests for Logging Out |
+| ruipeng2 | Finished Reading about Milestone 5.| Write First two Tests using LLM and generate report for the same.|
 | | | |
 </br>
 
 <b>Week 9</b>
 </br>
-Members present: List the NetID of the people who attended the meeting
+Members present: mehuljo2, ruipeng2, zexinl2, pranav31, wenqi6, rajan11, ac163
 </br>
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: Finished Assigned Tasks. Thinking about ways to implement @Before and @After functions for certain tests. Also discussed with Ruipeng on how to work for Mock Location Test Task. 
 </br>
 | NetID | Progress from last week | Tasks for next week |
 | ---------------| --------------------------------| ----------------------|
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
+| mehuljo2 | Finshed Writing tests assigned from previous week| Refactor Delete Location, Generate Coverage Report and Mock Location Test and add more test functions done by other members. Complete Milestone 5.|
+| pranav31 | Finshed Writing tests assigned from previous week | Asked to refurbish tests as they were not working. Complete Milestone 5.|
+| wenqi6 | Finshed Writing tests assigned from previous week | Complete Milestone 5 and help with leftovers.|
+| rajan11 | Finshed Writing tests assigned from previous week | Complete Milestone 5 and help with leftovers. |
+| zexinl2 | Finshed Writing tests assigned from previous week | Complete Milestone 5 and help with leftovers. |
+| ac163 | Finshed Writing tests assigned from previous week | Complete Milestone 5 and help with leftovers. |
+| ruipeng2 | Finshed Writing tests assigned from previous week and generate the report.| Add Docstrings and remaining tests for other testing functions and Complete Mileston 5|
 | | | |
 </br>
 
